@@ -1,2 +1,0 @@
-# glgame
-opengl game
