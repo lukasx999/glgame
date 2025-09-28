@@ -1,7 +1,6 @@
 #include <print>
 #include <string>
 #include <fstream>
-#include <span>
 
 #define GLAD_GL_IMPLEMENTATION
 #include <glad/gl.h>
@@ -73,6 +72,13 @@ struct Color {
 
     Color() = default;
 
+    Color(uint8_t r_, uint8_t g_, uint8_t b_, uint8_t a_)
+        : r(r_)
+        , g(g_)
+        , b(b_)
+        , a(a_)
+    { }
+
     Color(uint32_t color)
         : r(color >> 8*3 & 0xff)
         , g(color >> 8*2 & 0xff)
@@ -80,15 +86,24 @@ struct Color {
         , a(color >> 8*0 & 0xff)
     { }
 
-    static Color red() {
+    [[nodiscard]] constexpr Color normalized() const {
+        return {
+            static_cast<uint8_t>(r / 0xff),
+            static_cast<uint8_t>(g / 0xff),
+            static_cast<uint8_t>(b / 0xff),
+            static_cast<uint8_t>(a / 0xff)
+        };
+    }
+
+    [[nodiscard]] static constexpr Color red() {
         return 0xff0000ff;
     }
 
-    static Color green() {
+    [[nodiscard]] static constexpr Color green() {
         return 0x00ff00ff;
     }
 
-    static Color blue() {
+    [[nodiscard]] static constexpr Color blue() {
         return 0x0000ffff;
     }
 
@@ -155,13 +170,8 @@ public:
         glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
 
         GLint u_color = glGetUniformLocation(m_program, "u_color");
-        glUniform4f(
-            u_color,
-            static_cast<float>(color.r) / 0xff,
-            static_cast<float>(color.g) / 0xff,
-            static_cast<float>(color.b) / 0xff,
-            static_cast<float>(color.a) / 0xff
-        );
+        auto normalized = color.normalized();
+        glUniform4f(u_color, normalized.r, normalized.g, normalized.b, normalized.a);
 
         glBindVertexArray(m_vertex_array);
         glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
@@ -223,11 +233,13 @@ int main() {
 
     RectangleRenderer renderer;
 
+    // TODO:
+    // clear_background()
+    // glClearColor();
     while (!glfwWindowShouldClose(window)) {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         glViewport(0, 0, width, height);
-
         glClear(GL_COLOR_BUFFER_BIT);
 
         renderer.draw_rectangle(1000, 500, 100, 100, Color::red());
