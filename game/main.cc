@@ -27,11 +27,14 @@ int main() {
         ctx.with_draw_context([&]() {
 
             ctx.clear_background(Color::black());
-            ctx.draw_rectangle(1000, 500, 100, 100, Color::red());
-            ctx.draw_rectangle(0, 0, 300, 100, Color::blue());
+            // ctx.draw_rectangle(1000, 500, 100, 100, Color::red());
+            // ctx.draw_rectangle(0, 0, 300, 100, Color::blue());
+            //
+            // auto x = (std::sin(glfwGetTime()) + 1) / 2;
+            // ctx.draw_rectangle(x*(1920-300), 500, 300, 100, Color::green());
 
-            auto x = (std::sin(glfwGetTime()) + 1) / 2;
-            ctx.draw_rectangle(x*(1920-300), 500, 300, 100, Color::green());
+            ctx.draw_triangle(0, 0, 50, 50, 50, 0, Color::red());
+            // ctx.draw_triangle(0, 0, 1, 1, 1, 0, Color::red());
 
             handle_inputs(ctx);
         });

@@ -9,18 +9,21 @@
 #include <glm/ext.hpp>
 
 #include <detail/rectangle.hh>
+#include <detail/triangle.hh>
 #include <types.hh>
 
 namespace gfx {
 
 class Gfx {
     GLFWwindow* m_window;
-    detail::RectangleRenderer m_rect;
+    detail::RectangleRenderer m_rectangle;
+    detail::TriangleRenderer m_triangle;
 
 public:
     Gfx(int width, int height, const char* window_title, bool resizable_window)
         : m_window(init_glfw(width, height, window_title, resizable_window))
-        , m_rect(m_window)
+        , m_rectangle(m_window)
+        , m_triangle(m_window)
     { }
 
     ~Gfx() {
@@ -65,7 +68,11 @@ public:
     }
 
     void draw_rectangle(int x, int y, int width, int height, Color color) {
-        m_rect.draw_rectangle(x, y, width, height, color);
+        m_rectangle.draw(x, y, width, height, color);
+    }
+
+    void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, Color color) {
+        m_triangle.draw(x0, y0, x1, y1, x2, y2, color);
     }
 
     void clear_background(Color color) {

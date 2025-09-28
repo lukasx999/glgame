@@ -1,1 +1,1 @@
-target_sources(gfx PRIVATE gfx.cc rectangle.cc)
+target_sources(gfx PRIVATE gfx.cc rectangle.cc triangle.cc)

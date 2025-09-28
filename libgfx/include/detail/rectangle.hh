@@ -1,29 +1,16 @@
 #pragma once
 
 #include <array>
-#include <stdexcept>
 
 #include <glad/gl.h>
-
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
 #include <types.hh>
+#include <detail/detail.hh>
 
 namespace detail {
-
-struct Vertex {
-    glm::vec2 m_position;
-};
-
-inline constexpr char shader_vertex_src[] = {
-    #embed "../../shaders/shader.vert"
-};
-
-inline constexpr char shader_fragment_src[] = {
-    #embed "../../shaders/shader.frag"
-};
 
 class RectangleRenderer {
     GLFWwindow* m_window;
@@ -48,7 +35,7 @@ class RectangleRenderer {
 public:
     explicit RectangleRenderer(GLFWwindow* window);
 
-    void draw_rectangle(int x, int y, int width, int height, gfx::Color color) const {
+    void draw(int x, int y, int width, int height, gfx::Color color) const {
 
         glm::mat4 model(1.0f);
         model = glm::translate(model, glm::vec3(x, y, 0.0f));
@@ -86,48 +73,6 @@ public:
 
         glBindVertexArray(m_vertex_array);
         glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
-    }
-
-private:
-    [[nodiscard]] static GLuint create_shader_program() {
-
-        GLuint vertex_shader = load_shader(GL_VERTEX_SHADER);
-        GLuint fragment_shader = load_shader(GL_FRAGMENT_SHADER);
-        GLuint program = glCreateProgram();
-
-        glAttachShader(program, vertex_shader);
-        glAttachShader(program, fragment_shader);
-
-        glLinkProgram(program);
-        glUseProgram(program);
-
-        glDeleteShader(vertex_shader);
-        glDeleteShader(fragment_shader);
-
-        return program;
-    }
-
-    [[nodiscard]] static GLuint load_shader(GLenum type) {
-        GLuint vertex_shader = glCreateShader(type);
-
-        const char* src = [&]() {
-            switch (type) {
-                case GL_FRAGMENT_SHADER:
-                    return shader_fragment_src;
-                    break;
-
-                case GL_VERTEX_SHADER:
-                    return shader_vertex_src;
-                    break;
-            }
-
-            throw std::runtime_error("unknown opengl shader type");
-        }();
-
-        glShaderSource(vertex_shader, 1, &src, nullptr);
-        glCompileShader(vertex_shader);
-
-        return vertex_shader;
     }
 
 };

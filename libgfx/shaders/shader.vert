@@ -1,4 +1,4 @@
-#version 330
+#version 330 core
 
 in vec2 a_pos;
 uniform mat4 u_mvp;
