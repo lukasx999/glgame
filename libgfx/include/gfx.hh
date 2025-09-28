@@ -9,6 +9,7 @@
 #include <glm/ext.hpp>
 
 #include <detail/rectangle.hh>
+#include <detail/circle.hh>
 #include <detail/triangle.hh>
 #include <types.hh>
 
@@ -18,12 +19,14 @@ class Gfx {
     GLFWwindow* m_window;
     detail::RectangleRenderer m_rectangle;
     detail::TriangleRenderer m_triangle;
+    detail::CircleRenderer m_circle;
 
 public:
     Gfx(int width, int height, const char* window_title, bool resizable_window)
         : m_window(init_glfw(width, height, window_title, resizable_window))
         , m_rectangle(m_window)
         , m_triangle(m_window)
+        , m_circle(m_window)
     { }
 
     ~Gfx() {
@@ -76,6 +79,10 @@ public:
 
     void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, Color color) {
         m_triangle.draw(x0, y0, x1, y1, x2, y2, color);
+    }
+
+    void draw_circle(int x, int y, int radius, gfx::Color color) {
+        m_circle.draw(x, y, radius, color);
     }
 
     void clear_background(Color color) {

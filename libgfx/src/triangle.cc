@@ -14,6 +14,10 @@ detail::TriangleRenderer::TriangleRenderer(GLFWwindow* window)
 
     m_program = create_shader_program(triangle_shader_vertex_src, shader_fragment_src);
 
+    GLint a_position = glGetAttribLocation(m_program, "a_position");
+    glVertexAttribPointer(a_position, 2, GL_FLOAT, false, sizeof(TriangleVertex), reinterpret_cast<void*>(offsetof(TriangleVertex, m_position)));
+    glEnableVertexAttribArray(a_position);
+
     GLint a_vertex_no = glGetAttribLocation(m_program, "a_vertex_no");
     glVertexAttribPointer(a_vertex_no, 1, GL_INT, false, sizeof(TriangleVertex), reinterpret_cast<void*>(offsetof(TriangleVertex, m_vertex_no)));
     glEnableVertexAttribArray(a_vertex_no);

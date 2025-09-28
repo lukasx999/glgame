@@ -33,7 +33,9 @@ int main() {
             // auto x = (std::sin(glfwGetTime()) + 1) / 2;
             // ctx.draw_rectangle(x*(1920-300), 500, 300, 100, Color::green());
 
-            ctx.draw_triangle(0, 0, 50, 50, 50, 0, Color::red());
+            ctx.draw_circle(300, 300, 150, Color::blue());
+            ctx.draw_rectangle(300, 300, 10, 10, Color::red());
+            // ctx.draw_triangle(0, 0, 50, 0, 0, 50, Color::red());
             // ctx.draw_triangle(0, 0, 1, 1, 1, 0, Color::red());
 
             handle_inputs(ctx);

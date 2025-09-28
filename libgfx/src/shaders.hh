@@ -14,4 +14,8 @@ inline constexpr char triangle_shader_vertex_src[] = {
     #embed "../shaders/triangle.vert"
 };
 
+inline constexpr char circle_shader_fragment_src[] = {
+    #embed "../shaders/circle.frag"
+};
+
 } // namespace
