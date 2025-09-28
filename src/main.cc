@@ -95,6 +95,10 @@ struct Color {
         };
     }
 
+    [[nodiscard]] static constexpr Color black() {
+        return 0x000000ff;
+    }
+
     [[nodiscard]] static constexpr Color red() {
         return 0xff0000ff;
     }
@@ -211,6 +215,13 @@ private:
 
 };
 
+void clear_background(Color color) {
+    auto normalized = color.normalized();
+    glClearColor(normalized.r, normalized.g, normalized.b, normalized.a);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+// NOTE: what the user api should look like:
 /*
 int user_main() {
 
@@ -233,15 +244,12 @@ int main() {
 
     RectangleRenderer renderer;
 
-    // TODO:
-    // clear_background()
-    // glClearColor();
     while (!glfwWindowShouldClose(window)) {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
 
+        clear_background(Color::black());
         renderer.draw_rectangle(1000, 500, 100, 100, Color::red());
         renderer.draw_rectangle(0, 0, 300, 100, Color::blue());
 
