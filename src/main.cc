@@ -242,6 +242,7 @@ int main() {
     if (window == nullptr)
         return EXIT_FAILURE;
 
+    // TODO: manage renderer state globally
     RectangleRenderer renderer;
 
     while (!glfwWindowShouldClose(window)) {
