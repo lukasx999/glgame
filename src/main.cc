@@ -198,17 +198,17 @@ enum class KeyState {
     Repeat,
 };
 
-class GfxContext {
+class Gfx {
     GLFWwindow* m_window;
     RectangleRenderer m_rect;
 
 public:
-    GfxContext(int width, int height, const char* window_title)
+    Gfx(int width, int height, const char* window_title)
         : m_window(init_glfw(width, height, window_title))
         , m_rect(m_window)
     { }
 
-    ~GfxContext() {
+    ~Gfx() {
         glfwDestroyWindow(m_window);
         glfwTerminate();
     }
@@ -297,7 +297,7 @@ private:
 
 namespace {
 
-void handle_inputs(GfxContext& ctx) {
+void handle_inputs(Gfx& ctx) {
     if (ctx.get_key_state(GLFW_KEY_ESCAPE) == KeyState::Press) {
         glfwTerminate();
         exit(EXIT_SUCCESS);
@@ -308,7 +308,7 @@ void handle_inputs(GfxContext& ctx) {
 } // namespace
 
 int main() {
-    GfxContext ctx(1920, 1080, "GLGame");
+    Gfx ctx(1920, 1080, "GLGame");
 
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
