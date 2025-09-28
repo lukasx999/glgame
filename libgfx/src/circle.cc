@@ -1,3 +1,8 @@
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+
 #include <detail/circle.hh>
 #include "shaders.hh"
 
@@ -27,4 +32,45 @@ detail::CircleRenderer::CircleRenderer(GLFWwindow* window)
     glUseProgram(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void detail::CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
+    glm::mat4 model(1.0f);
+    // square is placed at the center of the circle
+    model = glm::translate(model, glm::vec3(x-radius, y-radius, 0.0f));
+    model = glm::scale(model, glm::vec3(radius*2, radius*2, 0.0f));
+
+    // TODO:
+    int fb_width, fb_height;
+    glfwGetFramebufferSize(m_window, &fb_width, &fb_height);
+
+    glm::mat4 projection = glm::ortho(
+        0.0f,
+        static_cast<float>(fb_width),
+        static_cast<float>(fb_height),
+        0.0f
+    );
+
+    glm::mat4 mvp = projection * model;
+
+    glUseProgram(m_program);
+
+    GLint u_mvp = glGetUniformLocation(m_program, "u_mvp");
+    glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
+
+    GLint u_window_height = glGetUniformLocation(m_program, "u_window_height");
+    glUniform1i(u_window_height, fb_height);
+
+    GLint u_radius = glGetUniformLocation(m_program, "u_radius");
+    glUniform1i(u_radius, radius);
+
+    GLint u_center = glGetUniformLocation(m_program, "u_center");
+    glUniform2f(u_center, x, y);
+
+    GLint u_color = glGetUniformLocation(m_program, "u_color");
+    auto normalized = color.normalized();
+    glUniform4f(u_color, normalized.r, normalized.g, normalized.b, normalized.a);
+
+    glBindVertexArray(m_vertex_array);
+    glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
 }
