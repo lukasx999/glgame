@@ -1,6 +1,7 @@
 #include <print>
 #include <string>
 #include <fstream>
+#include <functional>
 
 #define GLAD_GL_IMPLEMENTATION
 #include <glad/gl.h>
@@ -10,59 +11,10 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-namespace {
-
-struct Vertex {
-    glm::vec2 m_position;
-};
-
 [[nodiscard]] std::string read_entire_file(const char* path) {
     std::ifstream file(path);
     return { std::istreambuf_iterator(file), {} };
 }
-
-void handle_inputs(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwTerminate();
-        exit(EXIT_SUCCESS);
-    }
-}
-
-[[nodiscard]] GLFWwindow* init_glfw(int width, int height, const char* window_title) {
-
-    glfwSetErrorCallback([]([[maybe_unused]] int error, const char* desc) {
-        std::println(stderr, "glfw error: {}", desc);
-    });
-
-    if (!glfwInit())
-        return nullptr;
-
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
-
-    auto window = glfwCreateWindow(width, height, window_title, nullptr, nullptr);
-    if (window == nullptr) {
-        glfwTerminate();
-        return nullptr;
-    }
-
-    glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
-    glfwSwapInterval(1);
-
-    glDebugMessageCallback([](
-        [[maybe_unused]] GLenum source,
-        [[maybe_unused]] GLenum type,
-        [[maybe_unused]] GLuint id,
-        [[maybe_unused]] GLenum severity,
-        [[maybe_unused]] GLsizei length,
-        const GLchar *message,
-        [[maybe_unused]] const void *user_param
-    ) { std::println(stderr, "opengl error: {}", message); }, nullptr);
-
-    return window;
-}
-
-} // namespace
 
 struct Color {
     uint8_t r = 0;
@@ -113,7 +65,13 @@ struct Color {
 
 };
 
+struct Vertex {
+    glm::vec2 m_position;
+};
+
 class RectangleRenderer {
+    GLFWwindow* m_window;
+
     GLuint m_program;
     GLuint m_vertex_array;
     GLuint m_vertex_buffer;
@@ -132,7 +90,9 @@ class RectangleRenderer {
     };
 
 public:
-    RectangleRenderer() {
+    explicit RectangleRenderer(GLFWwindow* window)
+    : m_window(window)
+    {
         glGenVertexArrays(1, &m_vertex_array);
         glBindVertexArray(m_vertex_array);
 
@@ -164,8 +124,25 @@ public:
         model = glm::translate(model, glm::vec3(x, y, 0.0f));
         model = glm::scale(model, glm::vec3(width, height, 0.0f));
 
+        // TODO: camera
+        // glm::vec3 camera_position(0.0f, 0.0f, 0.0f);
+        // glm::vec3 camera_direction(0.0f, 0.0f, -1.0f);
+        // glm::vec3 up(0.0f, 1.0f, 0.0f);
+        // glm::mat4 view = glm::lookAt(camera_position, camera_position+camera_direction, up);
+
         glm::mat4 view(1.0f);
-        glm::mat4 projection = glm::ortho(0.0f, 1920.0f, 1080.0f, 0.0f);
+
+        // TODO:
+        int fb_width, fb_height;
+        glfwGetFramebufferSize(m_window, &fb_width, &fb_height);
+
+        glm::mat4 projection = glm::ortho(
+            0.0f,
+            static_cast<float>(fb_width),
+            static_cast<float>(fb_height),
+            0.0f
+        );
+
         glm::mat4 mvp = projection * view * model;
 
         glUseProgram(m_program);
@@ -215,51 +192,139 @@ private:
 
 };
 
-void clear_background(Color color) {
-    auto normalized = color.normalized();
-    glClearColor(normalized.r, normalized.g, normalized.b, normalized.a);
-    glClear(GL_COLOR_BUFFER_BIT);
-}
+enum class KeyState {
+    Release,
+    Press,
+    Repeat,
+};
 
-// NOTE: what the user api should look like:
-/*
-int user_main() {
+class GfxContext {
+    GLFWwindow* m_window;
+    RectangleRenderer m_rect;
 
-    Window window(1920, 1080, "hello");
-    Renderer renderer(window);
+public:
+    GfxContext(int width, int height, const char* window_title)
+        : m_window(init_glfw(width, height, window_title))
+        , m_rect(m_window)
+    { }
 
-    while (!window.should_close()) {
-        renderer.draw_rectangle(0, 0, 100, 100, Color::red());
+    ~GfxContext() {
+        glfwDestroyWindow(m_window);
+        glfwTerminate();
     }
 
-    return 0;
-}
-*/
-
-int main() {
-
-    auto window = init_glfw(1920, 1080, "GLGame");
-    if (window == nullptr)
-        return EXIT_FAILURE;
-
-    // TODO: manage renderer state globally
-    RectangleRenderer renderer;
-
-    while (!glfwWindowShouldClose(window)) {
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        glViewport(0, 0, width, height);
-
-        clear_background(Color::black());
-        renderer.draw_rectangle(1000, 500, 100, 100, Color::red());
-        renderer.draw_rectangle(0, 0, 300, 100, Color::blue());
-
-        handle_inputs(window);
-
-        glfwSwapBuffers(window);
+    void with_draw_context(std::function<void()> draw_fn) {
+        glViewport(0, 0, get_width(), get_height());
+        draw_fn();
+        glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    [[nodiscard]] bool window_should_close() const {
+        return glfwWindowShouldClose(m_window);
+    }
+
+    [[nodiscard]] int get_width() {
+        int width;
+        glfwGetFramebufferSize(m_window, &width, nullptr);
+        return width;
+    }
+
+    [[nodiscard]] int get_height() {
+        int height;
+        glfwGetFramebufferSize(m_window, nullptr, &height);
+        return height;
+    }
+
+    [[nodiscard]] KeyState get_key_state(int key) const {
+        // TODO: python script to generate wrappers for glfw keys
+
+        int state = glfwGetKey(m_window, key);
+        switch (state) {
+            case GLFW_RELEASE: return KeyState::Release;
+            case GLFW_PRESS:   return KeyState::Press;
+            case GLFW_REPEAT:  return KeyState::Repeat;
+
+        }
+        throw std::runtime_error("unknown glfw key state");
+    }
+
+    void draw_rectangle(int x, int y, int width, int height, Color color) {
+        m_rect.draw_rectangle(x, y, width, height, color);
+    }
+
+    void clear_background(Color color) {
+        auto normalized = color.normalized();
+        glClearColor(normalized.r, normalized.g, normalized.b, normalized.a);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+private:
+    [[nodiscard]] static GLFWwindow* init_glfw(int width, int height, const char* window_title) {
+
+        glfwSetErrorCallback([]([[maybe_unused]] int error, const char* desc) {
+            std::println(stderr, "glfw error: {}", desc);
+        });
+
+        if (!glfwInit())
+            return nullptr;
+
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+
+        auto window = glfwCreateWindow(width, height, window_title, nullptr, nullptr);
+        if (window == nullptr) {
+            glfwTerminate();
+            return nullptr;
+        }
+
+        glfwMakeContextCurrent(window);
+        gladLoadGL(glfwGetProcAddress);
+        glfwSwapInterval(1);
+
+        glDebugMessageCallback([](
+            [[maybe_unused]] GLenum source,
+            [[maybe_unused]] GLenum type,
+            [[maybe_unused]] GLuint id,
+            [[maybe_unused]] GLenum severity,
+            [[maybe_unused]] GLsizei length,
+            const GLchar *message,
+            [[maybe_unused]] const void *user_param
+        ) { std::println(stderr, "opengl error: {}", message); }, nullptr);
+
+        return window;
+    }
+};
+
+namespace {
+
+void handle_inputs(GfxContext& ctx) {
+    if (ctx.get_key_state(GLFW_KEY_ESCAPE) == KeyState::Press) {
+        glfwTerminate();
+        exit(EXIT_SUCCESS);
+    }
+}
+
+
+} // namespace
+
+int main() {
+    GfxContext ctx(1920, 1080, "GLGame");
+
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    while (!ctx.window_should_close()) {
+        ctx.with_draw_context([&]() {
+
+            ctx.clear_background(Color::black());
+            ctx.draw_rectangle(1000, 500, 100, 100, Color::red());
+            ctx.draw_rectangle(0, 0, 300, 100, Color::blue());
+
+            auto x = (std::sin(glfwGetTime()) + 1) / 2;
+            ctx.draw_rectangle(x*(1920-300), 500, 300, 100, Color::green());
+
+            handle_inputs(ctx);
+        });
+
+    }
+
 }
