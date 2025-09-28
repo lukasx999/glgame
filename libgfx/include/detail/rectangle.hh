@@ -30,7 +30,7 @@ class RectangleRenderer {
 public:
     explicit RectangleRenderer(GLFWwindow* window);
 
-    void draw(int x, int y, int width, int height, gfx::Color color) const;
+    void draw(int x, int y, int width, int height, float rotation, gfx::Color color) const;
 
 };
 

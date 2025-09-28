@@ -73,8 +73,8 @@ public:
     // TODO: draw_texture()
     // TODO: draw_circle()
 
-    void draw_rectangle(int x, int y, int width, int height, Color color) {
-        m_rectangle.draw(x, y, width, height, color);
+    void draw_rectangle(int x, int y, int width, int height, float rotation, Color color) {
+        m_rectangle.draw(x, y, width, height, rotation, color);
     }
 
     void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, Color color) {

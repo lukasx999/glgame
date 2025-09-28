@@ -34,10 +34,13 @@ detail::RectangleRenderer::RectangleRenderer(GLFWwindow* window)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void detail::RectangleRenderer::draw(int x, int y, int width, int height, gfx::Color color) const {
+void detail::RectangleRenderer::draw(int x, int y, int width, int height, float rotation, gfx::Color color) const {
 
     glm::mat4 model(1.0f);
-    model = glm::translate(model, glm::vec3(x, y, 0.0f));
+    model = glm::translate(model, glm::vec3(x+width/2, y+height/2, 0.0f));
+    model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+    // subtract half of width & height, needed for centered rotation
+    model = glm::translate(model, glm::vec3(-width/2, -height/2, 0.0f));
     model = glm::scale(model, glm::vec3(width, height, 0.0f));
 
     // TODO: camera
