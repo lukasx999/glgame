@@ -29,6 +29,7 @@ GLFWwindow* gfx::Gfx::init_glfw(int width, int height, const char* window_title,
     gladLoadGL(glfwGetProcAddress);
     glfwSwapInterval(1);
 
+    // TODO: #define GFX_WIREFRAME macro for toggling this
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glDebugMessageCallback([](

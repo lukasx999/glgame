@@ -19,6 +19,15 @@ void handle_inputs(Gfx& ctx) {
 
 } // namespace
 
+/*
+int main() {
+    gfx::Window window(1920, 1080, "GLGame", false);
+    window.get_key_state(...);
+    gfx::Renderer renderer(window);
+    renderer.draw_rectangle(...);
+}
+*/
+
 int main() {
 
     Gfx ctx(1920, 1080, "GLGame", false);
@@ -29,6 +38,7 @@ int main() {
             ctx.clear_background(Color::black());
             ctx.draw_rectangle(1000, 500, 100, 100, 0, Color::red());
             ctx.draw_rectangle(0, 0, 300, 100, 0, Color::blue());
+            ctx.draw_rectangle(0, 100, 100, 100, 0, Color::white());
             auto x = (std::sin(glfwGetTime()*3) + 1) / 2;
 
             int width = 300;

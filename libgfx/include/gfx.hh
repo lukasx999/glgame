@@ -15,6 +15,8 @@
 
 namespace gfx {
 
+// TODO: seperate renderer from windowing functionality
+// gfx::Window, gfx::Renderer
 class Gfx {
     GLFWwindow* m_window;
     detail::RectangleRenderer m_rectangle;
