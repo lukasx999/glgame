@@ -67,6 +67,9 @@ public:
         throw std::runtime_error("unknown glfw key state");
     }
 
+    // TODO: draw_texture()
+    // TODO: draw_circle()
+
     void draw_rectangle(int x, int y, int width, int height, Color color) {
         m_rectangle.draw(x, y, width, height, color);
     }
