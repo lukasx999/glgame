@@ -46,6 +46,7 @@ public:
 
     void draw(int x, int y, int radius, gfx::Color color) {
         glm::mat4 model(1.0f);
+        // square is placed at the center of the circle
         model = glm::translate(model, glm::vec3(x-radius, y-radius, 0.0f));
         model = glm::scale(model, glm::vec3(radius*2, radius*2, 0.0f));
 
