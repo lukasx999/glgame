@@ -1,6 +1,7 @@
 #include <print>
 #include <string>
 #include <fstream>
+#include <span>
 
 #define GLAD_GL_IMPLEMENTATION
 #include <glad/gl.h>
@@ -40,6 +41,84 @@ void handle_inputs(GLFWwindow* window) {
 }
 
 } // namespace
+
+struct Color {
+    uint8_t r = 0;
+    uint8_t g = 0;
+    uint8_t b = 0;
+    uint8_t a = 0;
+
+    Color() = default;
+
+    Color(uint32_t color)
+        : r(color >> 8*3 & 0xff)
+        , g(color >> 8*2 & 0xff)
+        , b(color >> 8*1 & 0xff)
+        , a(color >> 8*0 & 0xff)
+    { }
+
+    static Color red() {
+        return 0xff0000ff;
+    }
+
+    static Color green() {
+        return 0x00ff00ff;
+    }
+
+    static Color blue() {
+        return 0x0000ffff;
+    }
+
+};
+
+class Renderer {
+public:
+    Renderer() = default;
+
+    void draw_rectangle(int x, int y, int width, int height, Color color, GLuint program, GLuint vertex_array, std::span<unsigned int> indices) {
+
+        glm::mat4 model(1.0f);
+        model = glm::translate(model, glm::vec3(x, y, 0.0f));
+        model = glm::scale(model, glm::vec3(width, height, 0.0f));
+
+        glm::mat4 view(1.0f);
+        glm::mat4 projection = glm::ortho(0.0f, 1920.0f, 1080.0f, 0.0f);
+        glm::mat4 mvp = projection * view * model;
+
+        GLint u_mvp = glGetUniformLocation(program, "u_mvp");
+        glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
+
+        GLint u_color = glGetUniformLocation(program, "u_color");
+        glUniform4f(
+            u_color,
+            static_cast<float>(color.r) / 0xff,
+            static_cast<float>(color.g) / 0xff,
+            static_cast<float>(color.b) / 0xff,
+            static_cast<float>(color.a) / 0xff
+        );
+
+        glUseProgram(program);
+        glBindVertexArray(vertex_array);
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+    }
+
+private:
+
+};
+
+/*
+int user_main() {
+
+    Window window(1920, 1080, "hello");
+    Renderer renderer(window);
+
+    while (!window.should_close()) {
+        renderer.draw_rectangle(0, 0, 100, 100, Color::red());
+    }
+
+    return 0;
+}
+*/
 
 int main() {
 
@@ -83,8 +162,8 @@ int main() {
     };
 
     std::array indices {
-        0, 1, 2,
-        3, 2, 0
+        0u, 1u, 2u,
+        3u, 2u, 0u,
     };
 
     GLuint vertex_shader = load_shader("shader.vert", GL_VERTEX_SHADER);
@@ -115,12 +194,7 @@ int main() {
     glVertexAttribPointer(a_pos, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, m_position)));
     glEnableVertexAttribArray(a_pos);
 
-    glm::mat4 model(1.0f);
-    glm::mat4 view(1.0f);
-    glm::mat4 projection = glm::ortho(0.0f, 1920.0f, 1080.0f, 0.0f);
-    glm::mat4 mvp = projection * view * model;
-    GLint u_mvp = glGetUniformLocation(program, "u_mvp");
-    glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
+    Renderer renderer;
 
     while (!glfwWindowShouldClose(window)) {
         int width, height;
@@ -129,9 +203,8 @@ int main() {
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(program);
-        glBindVertexArray(vertex_array);
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+        renderer.draw_rectangle(1000, 500, 100, 100, Color::red(), program, vertex_array, indices);
+        renderer.draw_rectangle(0, 0, 300, 100, Color::blue(), program, vertex_array, indices);
 
         handle_inputs(window);
 
