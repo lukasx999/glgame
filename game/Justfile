@@ -3,8 +3,6 @@ configure:
 
 build: configure
     cmake --build build
-    glslangValidator shader.vert
-    glslangValidator shader.frag
 
 run: build
-    ./build/glgame
+    ./build/game

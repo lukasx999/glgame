@@ -1,0 +1,3 @@
+/home/lukas/code/repos/glgame/game/build/CMakeFiles/game.dir
+/home/lukas/code/repos/glgame/game/build/CMakeFiles/edit_cache.dir
+/home/lukas/code/repos/glgame/game/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/lukas/code/repos/glgame/game/build",
+  "command": "/usr/bin/clang++ -I/home/lukas/code/repos/glgame/game/../libgfx/subprojects/glad/include -I/home/lukas/code/repos/glgame/game/../libgfx/include -std=gnu++23 -o CMakeFiles/game.dir/main.cc.o -c /home/lukas/code/repos/glgame/game/main.cc",
+  "file": "/home/lukas/code/repos/glgame/game/main.cc",
+  "output": "/home/lukas/code/repos/glgame/game/build/CMakeFiles/game.dir/main.cc.o"
+}
+]
