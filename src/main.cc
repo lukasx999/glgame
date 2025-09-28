@@ -22,22 +22,45 @@ struct Vertex {
     return { std::istreambuf_iterator(file), {} };
 }
 
-[[nodiscard]] GLuint load_shader(const char* path, GLenum type) {
-    GLuint vertex_shader = glCreateShader(type);
-
-    auto file = read_entire_file(path);
-    auto src = file.c_str();
-
-    glShaderSource(vertex_shader, 1, &src, nullptr);
-    glCompileShader(vertex_shader);
-    return vertex_shader;
-}
-
 void handle_inputs(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwTerminate();
         exit(EXIT_SUCCESS);
     }
+}
+
+[[nodiscard]] GLFWwindow* init_glfw(int width, int height, const char* window_title) {
+
+    glfwSetErrorCallback([]([[maybe_unused]] int error, const char* desc) {
+        std::println(stderr, "glfw error: {}", desc);
+    });
+
+    if (!glfwInit())
+        return nullptr;
+
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+
+    auto window = glfwCreateWindow(width, height, window_title, nullptr, nullptr);
+    if (window == nullptr) {
+        glfwTerminate();
+        return nullptr;
+    }
+
+    glfwMakeContextCurrent(window);
+    gladLoadGL(glfwGetProcAddress);
+    glfwSwapInterval(1);
+
+    glDebugMessageCallback([](
+        [[maybe_unused]] GLenum source,
+        [[maybe_unused]] GLenum type,
+        [[maybe_unused]] GLuint id,
+        [[maybe_unused]] GLenum severity,
+        [[maybe_unused]] GLsizei length,
+        const GLchar *message,
+        [[maybe_unused]] const void *user_param
+    ) { std::println(stderr, "opengl error: {}", message); }, nullptr);
+
+    return window;
 }
 
 } // namespace
@@ -71,11 +94,52 @@ struct Color {
 
 };
 
-class Renderer {
-public:
-    Renderer() = default;
+class RectangleRenderer {
+    GLuint m_program;
+    GLuint m_vertex_array;
+    GLuint m_vertex_buffer;
+    GLuint m_index_buffer;
 
-    void draw_rectangle(int x, int y, int width, int height, Color color, GLuint program, GLuint vertex_array, std::span<unsigned int> indices) {
+    static constexpr std::array m_vertices {
+        Vertex({ 1.0, 1.0 }), // top-right
+        Vertex({ 0.0, 1.0 }), // top-left
+        Vertex({ 0.0, 0.0 }), // bottom-left
+        Vertex({ 1.0, 0.0 }), // bottom-right
+    };
+
+    static constexpr std::array m_indices {
+        0u, 1u, 2u,
+        3u, 2u, 0u,
+    };
+
+public:
+    RectangleRenderer() {
+        glGenVertexArrays(1, &m_vertex_array);
+        glBindVertexArray(m_vertex_array);
+
+        glGenBuffers(1, &m_vertex_buffer);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
+        glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
+
+        glGenBuffers(1, &m_index_buffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
+
+        m_program = create_shader_program();
+
+        GLint a_pos = glGetAttribLocation(m_program, "a_pos");
+        glVertexAttribPointer(a_pos, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, m_position)));
+        glEnableVertexAttribArray(a_pos);
+
+        // just to make sure everything still works after unbinding, as other classes/functions may
+        // modify opengl state after running the ctor
+        glBindVertexArray(0);
+        glUseProgram(0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    void draw_rectangle(int x, int y, int width, int height, Color color) const {
 
         glm::mat4 model(1.0f);
         model = glm::translate(model, glm::vec3(x, y, 0.0f));
@@ -85,10 +149,12 @@ public:
         glm::mat4 projection = glm::ortho(0.0f, 1920.0f, 1080.0f, 0.0f);
         glm::mat4 mvp = projection * view * model;
 
-        GLint u_mvp = glGetUniformLocation(program, "u_mvp");
+        glUseProgram(m_program);
+
+        GLint u_mvp = glGetUniformLocation(m_program, "u_mvp");
         glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
 
-        GLint u_color = glGetUniformLocation(program, "u_color");
+        GLint u_color = glGetUniformLocation(m_program, "u_color");
         glUniform4f(
             u_color,
             static_cast<float>(color.r) / 0xff,
@@ -97,12 +163,41 @@ public:
             static_cast<float>(color.a) / 0xff
         );
 
-        glUseProgram(program);
-        glBindVertexArray(vertex_array);
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+        glBindVertexArray(m_vertex_array);
+        glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
     }
 
 private:
+    [[nodiscard]] static GLuint create_shader_program() {
+
+        GLuint vertex_shader = load_shader("shader.vert", GL_VERTEX_SHADER);
+        GLuint fragment_shader = load_shader("shader.frag", GL_FRAGMENT_SHADER);
+        GLuint program = glCreateProgram();
+
+        glAttachShader(program, vertex_shader);
+        glAttachShader(program, fragment_shader);
+
+        glLinkProgram(program);
+        glUseProgram(program);
+
+        glDeleteShader(vertex_shader);
+        glDeleteShader(fragment_shader);
+
+        return program;
+    }
+
+    [[nodiscard]] static GLuint load_shader(const char* path, GLenum type) {
+        GLuint vertex_shader = glCreateShader(type);
+
+        auto file = read_entire_file(path);
+        auto src = file.c_str();
+
+        glShaderSource(vertex_shader, 1, &src, nullptr);
+        glCompileShader(vertex_shader);
+
+        return vertex_shader;
+    }
+
 
 };
 
@@ -122,79 +217,11 @@ int user_main() {
 
 int main() {
 
-    glfwSetErrorCallback([]([[maybe_unused]] int error, const char* desc) {
-        std::println(stderr, "glfw error: {}", desc);
-    });
-
-    if (!glfwInit()) {
+    auto window = init_glfw(1920, 1080, "GLGame");
+    if (window == nullptr)
         return EXIT_FAILURE;
-    }
 
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
-
-    auto window = glfwCreateWindow(1920, 1080, "GLGame", nullptr, nullptr);
-    if (window == nullptr) {
-        glfwTerminate();
-        return EXIT_FAILURE;
-    }
-
-    glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
-    glfwSwapInterval(1);
-
-    glDebugMessageCallback([](
-        [[maybe_unused]] GLenum source,
-        [[maybe_unused]] GLenum type,
-        [[maybe_unused]] GLuint id,
-        [[maybe_unused]] GLenum severity,
-        [[maybe_unused]] GLsizei length,
-        const GLchar *message,
-        [[maybe_unused]] const void *user_param
-    ) {
-                           std::println(stderr, "opengl error: {}", message);
-                           }, nullptr);
-
-    std::array vertices {
-        Vertex({ 1.0, 1.0 }), // top-right
-        Vertex({ 0.0, 1.0 }), // top-left
-        Vertex({ 0.0, 0.0 }), // bottom-left
-        Vertex({ 1.0, 0.0 }), // bottom-right
-    };
-
-    std::array indices {
-        0u, 1u, 2u,
-        3u, 2u, 0u,
-    };
-
-    GLuint vertex_shader = load_shader("shader.vert", GL_VERTEX_SHADER);
-    GLuint fragment_shader = load_shader("shader.frag", GL_FRAGMENT_SHADER);
-    GLuint program = glCreateProgram();
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
-    glUseProgram(program);
-    glDeleteShader(vertex_shader);
-    glDeleteShader(fragment_shader);
-
-    GLuint vertex_array;
-    glGenVertexArrays(1, &vertex_array);
-    glBindVertexArray(vertex_array);
-
-    GLuint vertex_buffer;
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
-
-    GLuint index_buffer;
-    glGenBuffers(1, &index_buffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-
-    GLint a_pos = glGetAttribLocation(program, "a_pos");
-    glVertexAttribPointer(a_pos, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, m_position)));
-    glEnableVertexAttribArray(a_pos);
-
-    Renderer renderer;
+    RectangleRenderer renderer;
 
     while (!glfwWindowShouldClose(window)) {
         int width, height;
@@ -203,8 +230,8 @@ int main() {
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        renderer.draw_rectangle(1000, 500, 100, 100, Color::red(), program, vertex_array, indices);
-        renderer.draw_rectangle(0, 0, 300, 100, Color::blue(), program, vertex_array, indices);
+        renderer.draw_rectangle(1000, 500, 100, 100, Color::red());
+        renderer.draw_rectangle(0, 0, 300, 100, Color::blue());
 
         handle_inputs(window);
 
