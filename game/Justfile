@@ -5,4 +5,5 @@ build: configure
     cmake --build build
 
 run: build
+    just -f ../libgfx/Justfile build
     ./build/game

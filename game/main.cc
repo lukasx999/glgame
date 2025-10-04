@@ -16,16 +16,16 @@ void handle_inputs(gfx::Renderer& rd) {
     }
 }
 
-} // namespace
-
-/*
-int main() {
-    gfx::Window window(1920, 1080, "GLGame", false);
-    window.get_key_state(...);
-    gfx::Renderer renderer(window);
-    renderer.draw_rectangle(...);
+void render_grid(gfx::Renderer& rd, int n, int size, gfx::Color color) {
+    for (int x=0; x < n; ++x) {
+        for (int y=0; y < n; ++y) {
+            float factor = 0.1;
+            rd.draw_rectangle(x*(size+size*factor), y*(size+size*factor), size, size, 0, color);
+        }
+    }
 }
-*/
+
+} // namespace
 
 int main() {
 
@@ -38,10 +38,7 @@ int main() {
             rd.clear_background(Color::black());
             std::println("fps: {}", window.get_fps());
 
-            for (int i=0; i < 500; ++i) {
-                int size = 50;
-                rd.draw_rectangle(i*size, 0, size, size, 0, 0x595959ff);
-            }
+            render_grid(rd, 100, 15, 0x595959ff);
 
             // rd.draw_rectangle(1000, 500, 100, 100, 0, Color::red());
             // rd.draw_rectangle(0, 0, 300, 100, 0, Color::blue());
