@@ -10,7 +10,7 @@ using gfx::KeyState;
 namespace {
 
 void handle_inputs(gfx::Renderer& rd) {
-    if (rd.get_window().get_key_state(GLFW_KEY_ESCAPE) == KeyState::Press) {
+    if (rd.get_window().get_key_state(gfx::Key::Escape) == KeyState::Press) {
         glfwTerminate();
         exit(EXIT_SUCCESS);
     }

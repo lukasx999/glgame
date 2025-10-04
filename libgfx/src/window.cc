@@ -9,7 +9,7 @@ GLFWwindow* gfx::Window::init_glfw(int width, int height, const char* window_tit
     });
 
     if (!glfwInit())
-        return nullptr;
+        throw std::runtime_error("failed to create window");
 
     glfwWindowHint(GLFW_RESIZABLE, resizable_window);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
@@ -17,7 +17,7 @@ GLFWwindow* gfx::Window::init_glfw(int width, int height, const char* window_tit
     auto window = glfwCreateWindow(width, height, window_title, nullptr, nullptr);
     if (window == nullptr) {
         glfwTerminate();
-        return nullptr;
+        throw std::runtime_error("failed to create window");
     }
 
     glfwMakeContextCurrent(window);
