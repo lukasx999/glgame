@@ -27,15 +27,15 @@ GLFWwindow* gfx::Window::init_glfw(int width, int height, const char* window_tit
     // TODO: #define GFX_WIREFRAME macro for toggling this
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    glDebugMessageCallback([](
-        [[maybe_unused]] GLenum source,
-        [[maybe_unused]] GLenum type,
-        [[maybe_unused]] GLuint id,
-        [[maybe_unused]] GLenum severity,
-        [[maybe_unused]] GLsizei length,
-        const GLchar *message,
-        [[maybe_unused]] const void *user_param
-    ) { std::println(stderr, "opengl error: {}", message); }, nullptr);
+    // glDebugMessageCallback([](
+    //     [[maybe_unused]] GLenum source,
+    //     [[maybe_unused]] GLenum type,
+    //     [[maybe_unused]] GLuint id,
+    //     [[maybe_unused]] GLenum severity,
+    //     [[maybe_unused]] GLsizei length,
+    //     const GLchar *message,
+    //     [[maybe_unused]] const void *user_param
+    // ) { std::println(stderr, "opengl error: {}", message); }, nullptr);
 
     return window;
 }

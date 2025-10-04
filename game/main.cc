@@ -25,6 +25,23 @@ void render_grid(gfx::Renderer& rd, int n, int size, gfx::Color color) {
     }
 }
 
+void render_grid_triangles(gfx::Renderer& rd, int n, int size, gfx::Color color) {
+    for (int x=0; x < n; ++x) {
+        for (int y=0; y < n; ++y) {
+            float factor = 0.1;
+            rd.draw_triangle(
+                x*(size+size*factor),
+                y*(size+size*factor),
+                x*(size+size*factor)+size,
+                y*(size+size*factor),
+                x*(size+size*factor),
+                y*(size+size*factor)+size,
+                color
+            );
+        }
+    }
+}
+
 } // namespace
 
 int main() {
@@ -36,9 +53,11 @@ int main() {
         window.with_draw_context([&]() {
 
             rd.clear_background(Color::black());
-            std::println("fps: {}", window.get_fps());
+            std::println("fps: {}", std::round(window.get_fps()));
 
-            render_grid(rd, 100, 15, 0x595959ff);
+            // render_grid(rd, 100, 15, 0x595959ff);
+
+            render_grid_triangles(rd, 100, 50, Color::red());
 
             // rd.draw_rectangle(1000, 500, 100, 100, 0, Color::red());
             // rd.draw_rectangle(0, 0, 300, 100, 0, Color::blue());
