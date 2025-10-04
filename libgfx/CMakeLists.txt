@@ -10,3 +10,5 @@ add_subdirectory(src)
 include_directories(subprojects/glad/include)
 include_directories(include)
 target_link_libraries(gfx PRIVATE glfw)
+
+add_executable(test test.cc)

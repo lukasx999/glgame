@@ -1,5 +1,6 @@
 #pragma once
 
+#include <tuple>
 #include <cstdint>
 
 namespace gfx {
@@ -26,12 +27,16 @@ struct Color {
         , a(color >> 8*0 & 0xff)
     { }
 
-    [[nodiscard]] constexpr Color normalized() const {
-        return {
-            static_cast<uint8_t>(r / 0xff),
-            static_cast<uint8_t>(g / 0xff),
-            static_cast<uint8_t>(b / 0xff),
-            static_cast<uint8_t>(a / 0xff)
+    [[nodiscard]] constexpr auto normalized() const {
+        struct NormalizedColor {
+            float r, g, b, a;
+        };
+
+        return NormalizedColor {
+            r / 255.0f,
+            g / 255.0f,
+            b / 255.0f,
+            a / 255.0f
         };
     }
 

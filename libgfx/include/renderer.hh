@@ -1,7 +1,5 @@
 #pragma once
 
-#include <functional>
-
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -14,6 +12,7 @@
 
 // TODO: draw_texture()
 // TODO: draw_line()
+// TODO: fps measurement
 
 namespace gfx {
 
