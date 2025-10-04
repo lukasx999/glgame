@@ -3,12 +3,13 @@
 #include <array>
 
 #include <types.hh>
+#include <window.hh>
 #include <detail/detail.hh>
 
 namespace detail {
 
 class CircleRenderer {
-    GLFWwindow* m_window;
+    gfx::Window& m_window;
 
     GLuint m_program;
     GLuint m_vertex_array;
@@ -28,14 +29,7 @@ class CircleRenderer {
     };
 
 public:
-    explicit CircleRenderer(GLFWwindow* window);
-
-    // TODO: is this useful?
-    // template <typename... Args>
-    // static void set_uniform(GLuint program, const char* name, std::function<void(Args...)> fn, Args&& ...args) {
-    //     GLint location = glGetUniformLocation(program, name);
-    //     fn(location, std::forward<Args>(args)...);
-    // }
+    explicit CircleRenderer(gfx::Window& window);
 
     void draw(int x, int y, int radius, gfx::Color color);
 

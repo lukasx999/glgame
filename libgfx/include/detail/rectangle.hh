@@ -2,13 +2,14 @@
 
 #include <array>
 
+#include <window.hh>
 #include <types.hh>
 #include <detail/detail.hh>
 
 namespace detail {
 
 class RectangleRenderer {
-    GLFWwindow* m_window;
+    gfx::Window& m_window;
 
     GLuint m_program;
     GLuint m_vertex_array;
@@ -28,7 +29,7 @@ class RectangleRenderer {
     };
 
 public:
-    explicit RectangleRenderer(GLFWwindow* window);
+    explicit RectangleRenderer(gfx::Window& window);
 
     void draw(int x, int y, int width, int height, float rotation, gfx::Color color) const;
 

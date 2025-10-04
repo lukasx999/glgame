@@ -6,7 +6,7 @@
 #include <detail/rectangle.hh>
 #include "shaders.hh"
 
-detail::RectangleRenderer::RectangleRenderer(GLFWwindow* window)
+detail::RectangleRenderer::RectangleRenderer(gfx::Window& window)
 : m_window(window)
 {
     glGenVertexArrays(1, &m_vertex_array);
@@ -51,14 +51,10 @@ void detail::RectangleRenderer::draw(int x, int y, int width, int height, float 
 
     glm::mat4 view(1.0f);
 
-    // TODO:
-    int fb_width, fb_height;
-    glfwGetFramebufferSize(m_window, &fb_width, &fb_height);
-
     glm::mat4 projection = glm::ortho(
         0.0f,
-        static_cast<float>(fb_width),
-        static_cast<float>(fb_height),
+        static_cast<float>(m_window.get_width()),
+        static_cast<float>(m_window.get_height()),
         0.0f
     );
 

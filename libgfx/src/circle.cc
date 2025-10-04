@@ -6,7 +6,7 @@
 #include <detail/circle.hh>
 #include "shaders.hh"
 
-detail::CircleRenderer::CircleRenderer(GLFWwindow* window)
+detail::CircleRenderer::CircleRenderer(gfx::Window& window)
 : m_window(window)
 {
     glGenVertexArrays(1, &m_vertex_array);
@@ -40,14 +40,10 @@ void detail::CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
     model = glm::translate(model, glm::vec3(x-radius, y-radius, 0.0f));
     model = glm::scale(model, glm::vec3(radius*2, radius*2, 0.0f));
 
-    // TODO:
-    int fb_width, fb_height;
-    glfwGetFramebufferSize(m_window, &fb_width, &fb_height);
-
     glm::mat4 projection = glm::ortho(
         0.0f,
-        static_cast<float>(fb_width),
-        static_cast<float>(fb_height),
+        static_cast<float>(m_window.get_width()),
+        static_cast<float>(m_window.get_height()),
         0.0f
     );
 
@@ -59,7 +55,7 @@ void detail::CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
     glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
 
     GLint u_window_height = glGetUniformLocation(m_program, "u_window_height");
-    glUniform1i(u_window_height, fb_height);
+    glUniform1i(u_window_height, m_window.get_height());
 
     GLint u_radius = glGetUniformLocation(m_program, "u_radius");
     glUniform1i(u_radius, radius);

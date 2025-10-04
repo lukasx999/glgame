@@ -3,15 +3,11 @@
 namespace {
 
 inline constexpr char shader_vertex_src[] = {
-    #embed "../shaders/shader.vert"
+    #embed "../shaders/default.vert"
 };
 
 inline constexpr char shader_fragment_src[] = {
-    #embed "../shaders/shader.frag"
-};
-
-inline constexpr char triangle_shader_vertex_src[] = {
-    #embed "../shaders/triangle.vert"
+    #embed "../shaders/default.frag"
 };
 
 inline constexpr char circle_shader_fragment_src[] = {

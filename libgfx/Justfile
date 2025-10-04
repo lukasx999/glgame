@@ -3,5 +3,5 @@ configure:
 
 build: configure
     cmake --build build
-    glslangValidator shaders/shader.vert
-    glslangValidator shaders/shader.frag
+    glslangValidator shaders/default.vert
+    glslangValidator shaders/default.frag
