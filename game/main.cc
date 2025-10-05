@@ -55,9 +55,9 @@ int main() {
             rd.clear_background(Color::black());
             std::println("fps: {}", std::round(window.get_fps()));
 
-            // render_grid(rd, 100, 15, 0x595959ff);
+            render_grid(rd, 300, 5, 0x595959ff);
 
-            render_grid_triangles(rd, 100, 50, Color::red());
+            // render_grid_triangles(rd, 100, 50, Color::red());
 
             // rd.draw_rectangle(1000, 500, 100, 100, 0, Color::red());
             // rd.draw_rectangle(0, 0, 300, 100, 0, Color::blue());

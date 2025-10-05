@@ -34,6 +34,7 @@ detail::RectangleRenderer::RectangleRenderer(gfx::Window& window)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+// TODO: gfx::Texture texture parameter
 void detail::RectangleRenderer::draw(int x, int y, int width, int height, float rotation, gfx::Color color) const {
 
     glm::mat4 model(1.0f);
