@@ -64,11 +64,11 @@ TextureRenderer::TextureRenderer(gfx::Window& window)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void TextureRenderer::draw(int x, int y, int width, int height, float rotation_deg, const gfx::Texture& texture) {
+void TextureRenderer::draw(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture) {
 
     glm::mat4 model(1.0f);
     model = glm::translate(model, glm::vec3(x+width/2, y+height/2, 0.0f));
-    model = glm::rotate(model, glm::radians(rotation_deg), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::rotate(model, rotation.get_radians(), glm::vec3(0.0f, 0.0f, 1.0f));
     // subtract half of width & height, needed for centered rotation
     model = glm::translate(model, glm::vec3(-width/2, -height/2, 0.0f));
     model = glm::scale(model, glm::vec3(width, height, 0.0f));

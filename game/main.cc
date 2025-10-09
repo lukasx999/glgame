@@ -20,7 +20,7 @@ void render_grid(gfx::Renderer& rd, int n, int size, gfx::Color color) {
     for (int x=0; x < n; ++x) {
         for (int y=0; y < n; ++y) {
             float factor = 0.1;
-            rd.draw_rectangle(x*(size+size*factor), y*(size+size*factor), size, size, 0, color);
+            rd.draw_rectangle(x*(size+size*factor), y*(size+size*factor), size, size, 0_deg, color);
         }
     }
 }
@@ -29,7 +29,7 @@ void render_grid_textured(gfx::Renderer& rd, int n, int size, const gfx::Texture
     for (int x=0; x < n; ++x) {
         for (int y=0; y < n; ++y) {
             float factor = 0.1;
-            rd.draw_texture(x*(size+size*factor), y*(size+size*factor), size, size, 0, texture);
+            rd.draw_texture(x*(size+size*factor), y*(size+size*factor), size, size, 0_deg, texture);
         }
     }
 }

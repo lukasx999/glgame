@@ -54,12 +54,12 @@ public:
         return 1.0 / m_frame_time;
     }
 
-    void draw_rectangle(int x, int y, int width, int height, float rotation_deg, Color color) {
-        m_rectangle.draw(x, y, width, height, rotation_deg, color);
+    void draw_rectangle(int x, int y, int width, int height, const gfx::IRotation& rotation, gfx::Color color) {
+        m_rectangle.draw(x, y, width, height, rotation, color);
     }
 
-    void draw_texture(int x, int y, int width, int height, float rotation_deg, const gfx::Texture& texture) {
-        m_texture.draw(x, y, width, height, rotation_deg, texture);
+    void draw_texture(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture) {
+        m_texture.draw(x, y, width, height, rotation, texture);
     }
 
     void draw_circle(int x, int y, int radius, gfx::Color color) {

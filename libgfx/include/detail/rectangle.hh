@@ -39,8 +39,7 @@ class RectangleRenderer {
 
 public:
     explicit RectangleRenderer(gfx::Window& window);
-    // TODO: overload for gfx::Degrees / gfx::Radians type?
-    void draw(int x, int y, int width, int height, float rotation_deg, gfx::Color color);
+    void draw(int x, int y, int width, int height, const gfx::IRotation& rotation, gfx::Color color);
     void flush();
 
 };

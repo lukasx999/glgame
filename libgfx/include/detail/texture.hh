@@ -56,7 +56,7 @@ class TextureRenderer {
 public:
     explicit TextureRenderer(gfx::Window& window);
 
-    void draw(int x, int y, int width, int height, float rotation_deg, const gfx::Texture& texture);
+    void draw(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture);
     void flush();
 
 private:
