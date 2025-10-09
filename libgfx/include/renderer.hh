@@ -14,7 +14,6 @@
 
 // TODO: 2d camera
 // TODO: tui for statistics
-// TODO: get time
 // TODO: limit fps
 // TODO: draw_line()
 // TODO: draw_text() via freetype
@@ -59,16 +58,16 @@ public:
         m_rectangle.draw(x, y, width, height, rotation_deg, color);
     }
 
+    void draw_texture(int x, int y, int width, int height, float rotation_deg, const gfx::Texture& texture) {
+        m_texture.draw(x, y, width, height, rotation_deg, texture);
+    }
+
     void draw_circle(int x, int y, int radius, gfx::Color color) {
         m_circle.draw(x, y, radius, color);
     }
 
     void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color) {
         m_triangle.draw(x0, y0, x1, y1, x2, y2, color);
-    }
-
-    void draw_texture(int x, int y, int width, int height, float rotation_deg, const gfx::Texture& texture) {
-        m_texture.draw(x, y, width, height, rotation_deg, texture);
     }
 
     void clear_background(Color color) {
