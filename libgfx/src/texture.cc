@@ -26,7 +26,7 @@ TextureRenderer::TextureRenderer(gfx::Window& window)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
 
-    m_program = create_shader_program(texture_shader_vertex_src, texture_shader_fragment_src);
+    m_program = create_shader_program(shaders::vertex::texture, shaders::fragment::texture);
 
     GLint a_pos = glGetAttribLocation(m_program, "a_pos");
     glVertexAttribPointer(a_pos, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, m_position)));

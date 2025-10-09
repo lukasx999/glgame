@@ -22,7 +22,7 @@ CircleRenderer::CircleRenderer(gfx::Window& window)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
 
-    m_program = create_shader_program(shader_vertex_src, circle_shader_fragment_src);
+    m_program = create_shader_program(shaders::vertex::default_, shaders::fragment::circle);
 
     GLint a_pos = glGetAttribLocation(m_program, "a_pos");
     glVertexAttribPointer(a_pos, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, m_position)));

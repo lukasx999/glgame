@@ -16,7 +16,7 @@ TriangleRenderer::TriangleRenderer(gfx::Window& window)
     glGenVertexArrays(1, &m_vertex_array);
     glBindVertexArray(m_vertex_array);
 
-    m_program = detail::create_shader_program(shader_vertex_src, shader_fragment_src);
+    m_program = detail::create_shader_program(shaders::vertex::default_, shaders::fragment::default_);
 
     glGenBuffers(1, &m_vertex_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);

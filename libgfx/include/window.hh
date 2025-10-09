@@ -42,6 +42,10 @@ public:
         return height;
     }
 
+    [[nodiscard]] double get_time() const {
+        return glfwGetTime();
+    }
+
     [[nodiscard]] KeyState get_key_state(Key key) const {
         int state = glfwGetKey(m_window, gfx_key_to_glfw_key(key));
 

@@ -14,7 +14,7 @@ RectangleRenderer::RectangleRenderer(gfx::Window& window)
 : m_window(window)
 {
 
-    m_program = create_shader_program(rectangle_shader_vertex_src, rectangle_shader_fragment_src);
+    m_program = create_shader_program(shaders::vertex::rectangle, shaders::fragment::rectangle);
 
     glGenVertexArrays(1, &m_vertex_array);
     glBindVertexArray(m_vertex_array);
