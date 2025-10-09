@@ -8,6 +8,7 @@ namespace gfx {
 class Texture {
     int m_width;
     int m_height;
+    int m_channels;
     unsigned char* m_data;
 
 public:
@@ -24,6 +25,10 @@ public:
 
     [[nodiscard]] int get_height() const {
         return m_height;
+    }
+
+    [[nodiscard]] int get_channels() const {
+        return m_channels;
     }
 
     // TODO: copy/move ctor

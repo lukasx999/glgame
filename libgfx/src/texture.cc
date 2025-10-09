@@ -85,12 +85,11 @@ void TextureRenderer::draw(int x, int y, int width, int height, float rotation_d
     glm::mat4 mvp = projection * view * model;
 
     if (m_group_data.contains(texture.get_data())) {
-        RenderGroup& data = m_group_data.at(texture.get_data());
-        data.transforms.push_back(std::move(mvp));
+        RenderGroup& group = m_group_data.at(texture.get_data());
+        group.transforms.push_back(std::move(mvp));
 
     } else {
         m_group_data.emplace(texture.get_data(), RenderGroup(texture, {mvp}));
-
     }
 
 }
@@ -121,14 +120,16 @@ void TextureRenderer::flush() {
             GL_STATIC_DRAW
         );
 
+        GLint format = get_opengl_texture_format(texture);
+
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
-            GL_RGB,
+            format,
             texture.get_width(),
             texture.get_height(),
             0,
-            GL_RGB,
+            format,
             GL_UNSIGNED_BYTE,
             texture.get_data()
         );

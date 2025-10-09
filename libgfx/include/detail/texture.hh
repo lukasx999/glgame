@@ -59,6 +59,15 @@ public:
     void draw(int x, int y, int width, int height, float rotation_deg, const gfx::Texture& texture);
     void flush();
 
+private:
+    [[nodiscard]] static constexpr GLint get_opengl_texture_format(const gfx::Texture& texture) {
+        switch (texture.get_channels()) {
+            case 3: return GL_RGB;
+            case 4: return GL_RGBA;
+        }
+        throw std::runtime_error("invalid channel count");
+    }
+
 };
 
 } // namespace detail

@@ -58,7 +58,7 @@ int main() {
     gfx::Window window(600, 600, "GLGame", false);
     gfx::Renderer rd(window);
 
-    gfx::Texture tex("./wall.jpg");
+    gfx::Texture tex("./awesomeface.png");
 
     while (!window.should_close()) {
         rd.with_draw_context([&]() {
