@@ -14,6 +14,7 @@ class TextureRenderer {
     GLuint m_program;
     GLuint m_vertex_array;
     GLuint m_vertex_buffer;
+    GLuint m_instanced_array;
     GLuint m_index_buffer;
     GLuint m_tex_coord_buffer;
 
@@ -36,6 +37,8 @@ class TextureRenderer {
         3u, 2u, 0u,
     };
 
+    std::vector<glm::mat4> m_instance_data;
+
 public:
     explicit TextureRenderer(gfx::Window& window);
 
@@ -46,7 +49,7 @@ public:
         int height,
         float rotation_deg,
         const gfx::Texture& texture
-    ) const;
+    );
 
 };
 

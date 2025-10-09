@@ -26,6 +26,7 @@ public:
         return m_height;
     }
 
+    // TODO: copy/move ctor
     Texture(const Texture&) = delete;
     Texture(Texture&&) = delete;
     Texture& operator=(const Texture&) = delete;

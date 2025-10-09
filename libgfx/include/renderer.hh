@@ -15,6 +15,7 @@
 // TODO: get time
 // TODO: limit fps
 // TODO: draw_line()
+// TODO: draw_text() via freetype
 
 namespace gfx {
 
