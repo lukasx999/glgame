@@ -8,7 +8,9 @@
 #include <detail/triangle.hh>
 #include "shaders.hh"
 
-detail::TriangleRenderer::TriangleRenderer(gfx::Window& window)
+namespace detail {
+
+TriangleRenderer::TriangleRenderer(gfx::Window& window)
 : m_window(window)
 {
     glGenVertexArrays(1, &m_vertex_array);
@@ -28,7 +30,15 @@ detail::TriangleRenderer::TriangleRenderer(gfx::Window& window)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void detail::TriangleRenderer::draw(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color) {
+void TriangleRenderer::draw(
+    int x0,
+    int y0,
+    int x1,
+    int y1,
+    int x2,
+    int y2,
+    gfx::Color color
+) {
 
     std::array vertices {
         Vertex({ x0, y0 }),
@@ -63,3 +73,5 @@ void detail::TriangleRenderer::draw(int x0, int y0, int x1, int y1, int x2, int 
     glBindVertexArray(m_vertex_array);
     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 }
+
+} // namespace detail

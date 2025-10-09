@@ -6,7 +6,9 @@
 #include <detail/circle.hh>
 #include "shaders.hh"
 
-detail::CircleRenderer::CircleRenderer(gfx::Window& window)
+namespace detail {
+
+CircleRenderer::CircleRenderer(gfx::Window& window)
 : m_window(window)
 {
     glGenVertexArrays(1, &m_vertex_array);
@@ -34,7 +36,7 @@ detail::CircleRenderer::CircleRenderer(gfx::Window& window)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void detail::CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
+void CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
     glm::mat4 model(1.0f);
     // square is placed at the center of the circle
     model = glm::translate(model, glm::vec3(x-radius, y-radius, 0.0f));
@@ -70,3 +72,5 @@ void detail::CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
     glBindVertexArray(m_vertex_array);
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
 }
+
+} // namespace detail

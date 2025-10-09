@@ -46,34 +46,18 @@ void render_grid_triangles(gfx::Renderer& rd, int n, int size, gfx::Color color)
 
 int main() {
 
-    gfx::Window window(1920, 1080, "GLGame", false);
+    gfx::Window window(600, 600, "GLGame", false);
     gfx::Renderer rd(window);
 
+    gfx::Texture tex("./wall.jpg");
+
     while (!window.should_close()) {
-        window.with_draw_context([&]() {
+        rd.with_draw_context([&]() {
 
             rd.clear_background(Color::black());
-            std::println("fps: {}", std::round(window.get_fps()));
+            std::println("fps: {}", std::round(rd.get_fps()));
 
             render_grid(rd, 300, 5, 0x595959ff);
-
-            // render_grid_triangles(rd, 100, 50, Color::red());
-
-            // rd.draw_rectangle(1000, 500, 100, 100, 0, Color::red());
-            // rd.draw_rectangle(0, 0, 300, 100, 0, Color::blue());
-            // rd.draw_rectangle(0, 100, 100, 100, 0, Color::white());
-            // auto x = (std::sin(glfwGetTime()*3) + 1) / 2;
-            //
-            // int width = 300;
-            // int height = 100;
-            // int anim_x = x*(1920-width);
-            // int y = 500;
-            // rd.draw_rectangle(anim_x, y, width, height, 0, Color::green());
-            // rd.draw_rectangle(anim_x, y, width, height, x*360, Color::blue());
-            //
-            // rd.draw_circle(anim_x+width/2.0f, y+height/2, 50, Color::red());
-            // rd.draw_circle(300, 300, 150, Color::green());
-            // rd.draw_circle(300, 300, x*150, Color::blue());
 
             handle_inputs(rd);
         });

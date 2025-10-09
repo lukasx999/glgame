@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <vector>
 
 #include <window.hh>
 #include <types.hh>
@@ -9,21 +8,14 @@
 
 namespace detail {
 
-class RectangleRenderer {
+class TextureRenderer {
     gfx::Window& m_window;
 
     GLuint m_program;
     GLuint m_vertex_array;
     GLuint m_vertex_buffer;
-    GLuint m_instanced_array;
     GLuint m_index_buffer;
-
-    struct InstanceData {
-        glm::mat4 mvp;
-        glm::vec4 color;
-    };
-
-    std::vector<InstanceData> m_instance_data;
+    GLuint m_tex_coord_buffer;
 
     static constexpr std::array m_vertices {
         Vertex({ 1.0, 1.0 }), // top-right
@@ -32,15 +24,29 @@ class RectangleRenderer {
         Vertex({ 1.0, 0.0 }), // bottom-right
     };
 
+    static constexpr std::array m_tex_coords {
+        glm::vec2(1.0, 0.0),
+        glm::vec2(0.0, 0.0),
+        glm::vec2(0.0, 1.0),
+        glm::vec2(1.0, 1.0),
+    };
+
     static constexpr std::array m_indices {
         0u, 1u, 2u,
         3u, 2u, 0u,
     };
 
 public:
-    explicit RectangleRenderer(gfx::Window& window);
-    void draw(int x, int y, int width, int height, float rotation_deg, gfx::Color color);
-    void flush();
+    explicit TextureRenderer(gfx::Window& window);
+
+    void draw(
+        int x,
+        int y,
+        int width,
+        int height,
+        float rotation_deg,
+        const gfx::Texture& texture
+    ) const;
 
 };
 

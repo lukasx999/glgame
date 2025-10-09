@@ -8,6 +8,7 @@ add_library(gfx)
 target_compile_options(gfx PRIVATE "-Wno-c23-extensions" "-Wall" "-Wextra" "-O3")
 add_subdirectory(src)
 include_directories(subprojects/glad/include)
+include_directories(subprojects/stb)
 include_directories(include)
 target_link_libraries(gfx PRIVATE glfw)
 

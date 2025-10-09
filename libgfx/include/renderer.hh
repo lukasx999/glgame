@@ -8,19 +8,26 @@
 #include <detail/rectangle.hh>
 #include <detail/circle.hh>
 #include <detail/triangle.hh>
+#include <detail/texture.hh>
 #include <types.hh>
 #include <window.hh>
 
-// TODO: draw_texture()
+// TODO: get time
+// TODO: limit fps
 // TODO: draw_line()
 
 namespace gfx {
 
 class Renderer {
     Window& m_window;
+
     detail::RectangleRenderer m_rectangle;
     detail::CircleRenderer m_circle;
     detail::TriangleRenderer m_triangle;
+    detail::TextureRenderer m_texture;
+
+    double m_frame_time = 0.0;
+    double m_last_frame = 0.0;
 
 public:
     explicit Renderer(Window& window)
@@ -28,14 +35,32 @@ public:
         , m_rectangle(m_window)
         , m_circle(m_window)
         , m_triangle(m_window)
+        , m_texture(m_window)
     { }
 
     [[nodiscard]] Window& get_window() const {
         return m_window;
     }
 
-    void draw_rectangle(int x, int y, int width, int height, float rotation, Color color) {
-        m_rectangle.draw(x, y, width, height, rotation, color);
+    void with_draw_context(std::function<void()> draw_fn) {
+        calculate_frame_time();
+        glViewport(0, 0, m_window.get_width(), m_window.get_height());
+        draw_fn();
+        flush();
+        glfwSwapBuffers(m_window.m_window);
+        glfwPollEvents();
+    }
+
+    [[nodiscard]] double get_frame_time() const {
+        return m_frame_time;
+    }
+
+    [[nodiscard]] double get_fps() const {
+        return 1.0 / m_frame_time;
+    }
+
+    void draw_rectangle(int x, int y, int width, int height, float rotation_deg, Color color) {
+        m_rectangle.draw(x, y, width, height, rotation_deg, color);
     }
 
     void draw_circle(int x, int y, int radius, gfx::Color color) {
@@ -46,11 +71,27 @@ public:
         m_triangle.draw(x0, y0, x1, y1, x2, y2, color);
     }
 
+    void draw_texture(int x, int y, int width, int height, float rotation_deg, const gfx::Texture& texture) {
+        m_texture.draw(x, y, width, height, rotation_deg, texture);
+    }
+
     void clear_background(Color color) {
         auto normalized = color.normalized();
         glClearColor(normalized.r, normalized.g, normalized.b, normalized.a);
         glClear(GL_COLOR_BUFFER_BIT);
     }
+
+private:
+    void flush() {
+        m_rectangle.flush();
+    }
+
+    void calculate_frame_time() {
+        double time = glfwGetTime();
+        m_frame_time = time - m_last_frame;
+        m_last_frame = time;
+    }
+
 };
 
 } // namespace gfx

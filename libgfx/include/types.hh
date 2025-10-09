@@ -1,9 +1,37 @@
 #pragma once
 
-#include <tuple>
+#include <filesystem>
 #include <cstdint>
 
 namespace gfx {
+
+class Texture {
+    int m_width;
+    int m_height;
+    unsigned char* m_data;
+
+public:
+    Texture(std::filesystem::path path);
+    ~Texture();
+
+    [[nodiscard]] unsigned char* get_data() const {
+        return m_data;
+    }
+
+    [[nodiscard]] int get_width() const {
+        return m_width;
+    }
+
+    [[nodiscard]] int get_height() const {
+        return m_height;
+    }
+
+    Texture(const Texture&) = delete;
+    Texture(Texture&&) = delete;
+    Texture& operator=(const Texture&) = delete;
+    Texture& operator=(Texture&&) = delete;
+
+};
 
 struct Color {
     uint8_t r = 0;
