@@ -1,11 +1,14 @@
-#include <print>
+#include <renderer.hh>
 
-// has to be included before defining GLAD_GL_IMPLEMENTATION, as we'd otherwise
-// get 2 implementations
-#include "gfx.hh"
+namespace gfx {
 
-#define GLAD_GL_IMPLEMENTATION
-#include <glad/gl.h>
+void Renderer::with_draw_context(std::function<void()> draw_fn) {
+    calculate_frame_time();
+    glViewport(0, 0, m_window.get_width(), m_window.get_height());
+    draw_fn();
+    flush();
+    glfwSwapBuffers(m_window.m_window);
+    glfwPollEvents();
+}
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+} // namespace gfx
