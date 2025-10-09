@@ -19,6 +19,7 @@ RectangleRenderer::RectangleRenderer(gfx::Window& window)
     glGenVertexArrays(1, &m_vertex_array);
     glBindVertexArray(m_vertex_array);
 
+
     glGenBuffers(1, &m_vertex_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
     glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
@@ -27,9 +28,14 @@ RectangleRenderer::RectangleRenderer(gfx::Window& window)
     glVertexAttribPointer(a_pos, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, m_position)));
     glEnableVertexAttribArray(a_pos);
 
-    glGenBuffers(1, &m_instanced_array);
-    glBindBuffer(GL_ARRAY_BUFFER, m_instanced_array);
 
+    // using uniform mat4[]'s is not a good idea, as they have a very low size limit
+    // therefore we use an instanced array
+    glGenBuffers(1, &m_transform_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_transform_buffer);
+
+    // there is no way to directly set the attrib pointer for an `in mat4`, but
+    // we can just treat it as 4 `in vec4`'s using this workaround:
     GLint a_mvp = glGetAttribLocation(m_program, "a_mvp");
     for (int i=0; i < 4; ++i) {
         glEnableVertexAttribArray(a_mvp+i);
@@ -102,7 +108,7 @@ void RectangleRenderer::draw(int x, int y, int width, int height, float rotation
 
 void RectangleRenderer::flush() {
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_instanced_array);
+    glBindBuffer(GL_ARRAY_BUFFER, m_transform_buffer);
     glBufferData(GL_ARRAY_BUFFER, m_instance_data.size() * sizeof(InstanceData), m_instance_data.data(), GL_STATIC_DRAW);
 
     glUseProgram(m_program);
@@ -115,6 +121,7 @@ void RectangleRenderer::flush() {
         nullptr,
         m_instance_data.size()
     );
+
     m_instance_data.clear();
 }
 

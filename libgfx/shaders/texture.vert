@@ -2,10 +2,10 @@
 
 in vec2 a_pos;
 in vec2 a_uv;
+in mat4 a_mvp;
 out vec2 frag_uv;
-uniform mat4 u_mvp;
 
 void main() {
-    gl_Position = u_mvp * vec4(a_pos, 0.0, 1.0);
+    gl_Position = a_mvp * vec4(a_pos, 0.0, 1.0);
     frag_uv = a_uv;
 }

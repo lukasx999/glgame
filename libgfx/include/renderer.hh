@@ -12,6 +12,8 @@
 #include <types.hh>
 #include <window.hh>
 
+// TODO: 2d camera
+// TODO: tui for statistics
 // TODO: get time
 // TODO: limit fps
 // TODO: draw_line()
@@ -78,6 +80,7 @@ public:
 private:
     void flush() {
         m_rectangle.flush();
+        m_texture.flush();
     }
 
     void calculate_frame_time() {
