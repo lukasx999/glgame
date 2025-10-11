@@ -4,6 +4,7 @@
 
 #include "gfx.hh"
 
+using gfx::Vec;
 using gfx::Color;
 using gfx::KeyState;
 
@@ -51,6 +52,21 @@ void render_grid_triangles(gfx::Renderer& rd, int n, int size, gfx::Color color)
     }
 }
 
+void draw_spiked_ball(gfx::Renderer& rd, float step) {
+    int height = rd.get_window().get_height();
+    int width = rd.get_window().get_width();
+
+    for (float angle = 0; angle < 360; angle += step) {
+        Vec midpoint(width/2.0f, height/2.0f);
+        Vec pos(0, 200);
+
+        pos.rotate(gfx::Degrees(angle));
+
+        Vec end = midpoint + pos;
+        rd.draw_line(midpoint.x, midpoint.y, end.x, end.y, gfx::Color::red());
+    }
+}
+
 } // namespace
 
 int main() {
@@ -66,8 +82,10 @@ int main() {
             rd.clear_background(Color::black());
             std::println("fps: {}", std::round(rd.get_fps()));
 
+            draw_spiked_ball(rd, 0.01);
+
             // render_grid(rd, 300, 5, 0x595959ff);
-            render_grid_textured(rd, 300, 50, tex);
+            // render_grid_textured(rd, 300, 50, tex);
 
             handle_inputs(rd);
         });

@@ -7,4 +7,5 @@ circle.cc
 triangle.cc
 texture.cc
 types.cc
+line.cc
 )

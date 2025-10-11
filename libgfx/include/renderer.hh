@@ -9,13 +9,14 @@
 #include <detail/circle.hh>
 #include <detail/triangle.hh>
 #include <detail/texture.hh>
+#include <detail/line.hh>
+
 #include <types.hh>
 #include <window.hh>
 
 // TODO: 2d camera
 // TODO: tui for statistics
 // TODO: limit fps
-// TODO: draw_line()
 // TODO: draw_text() via freetype
 
 namespace gfx {
@@ -27,6 +28,7 @@ class Renderer {
     detail::CircleRenderer m_circle;
     detail::TriangleRenderer m_triangle;
     detail::TextureRenderer m_texture;
+    detail::LineRenderer m_line;
 
     double m_frame_time = 0.0;
     double m_last_frame = 0.0;
@@ -38,6 +40,7 @@ public:
         , m_circle(m_window)
         , m_triangle(m_window)
         , m_texture(m_window)
+        , m_line(m_window)
     { }
 
     [[nodiscard]] Window& get_window() const {
@@ -68,6 +71,10 @@ public:
 
     void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color) {
         m_triangle.draw(x0, y0, x1, y1, x2, y2, color);
+    }
+
+    void draw_line(int x0, int y0, int x1, int y1, gfx::Color color) {
+        m_line.draw(x0, y0, x1, y1, color);
     }
 
     void clear_background(Color color) {
