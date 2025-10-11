@@ -3,3 +3,6 @@ configure:
 
 build: configure
     cmake --build build
+
+test: build
+    ./build/tests

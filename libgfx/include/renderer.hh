@@ -14,9 +14,10 @@
 #include <types.hh>
 #include <window.hh>
 
+// TODO: auto-invoke python script for generating shader glue code
 // TODO: 2d camera
 // TODO: tui for statistics
-// TODO: limit fps
+// TODO: limit fps eg: set_fps(std::optional<int> fps)
 // TODO: draw_text() via freetype
 
 namespace gfx {

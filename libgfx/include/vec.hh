@@ -10,6 +10,8 @@ struct Vec {
     float x;
     float y;
 
+    constexpr bool operator<=>(const Vec& other) const = default;
+
     constexpr Vec operator+(const Vec& other) const {
         return {
             x + other.x,
