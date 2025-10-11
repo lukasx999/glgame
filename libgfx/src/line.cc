@@ -6,6 +6,7 @@
 #include <glm/ext.hpp>
 
 #include <detail/line.hh>
+#include <detail/detail.hh>
 #include "shaders.hh"
 
 namespace detail {
@@ -14,7 +15,7 @@ LineRenderer::LineRenderer(gfx::Window& window)
 : m_window(window)
 {
 
-    m_program = create_shader_program(shaders::vertex::default_, shaders::fragment::default_);
+    m_program = create_shader_program(shaders::vertex::line, shaders::fragment::line);
 
     glGenVertexArrays(1, &m_vertex_array);
     glBindVertexArray(m_vertex_array);
@@ -26,6 +27,15 @@ LineRenderer::LineRenderer(gfx::Window& window)
     glVertexAttribPointer(a_pos, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, m_position)));
     glEnableVertexAttribArray(a_pos);
 
+
+    glGenBuffers(1, &m_color_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_color_buffer);
+
+    GLint a_color = glGetAttribLocation(m_program, "a_color");
+    glEnableVertexAttribArray(a_color);
+    glVertexAttribPointer(a_color, 4, GL_FLOAT, false, sizeof(glm::vec4), nullptr);
+    glVertexAttribDivisor(a_color, 1);
+
     // just to make sure everything still works after unbinding, as other classes/functions may
     // modify opengl state after running the ctor
     glBindVertexArray(0);
@@ -35,37 +45,27 @@ LineRenderer::LineRenderer(gfx::Window& window)
 
 void LineRenderer::draw(int x0, int y0, int x1, int y1, gfx::Color color) {
 
+    m_batch.push_back(Vertex({ x_to_ndc(m_window, x0), y_to_ndc(m_window, y0) }));
+    m_batch.push_back(Vertex({ x_to_ndc(m_window, x1), y_to_ndc(m_window, y1) }));
+
+    auto c = color.normalized();
+    m_colors.push_back(glm::vec4(c.r, c.g, c.b, c.a));
+}
+
+void LineRenderer::flush() {
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
+    glBufferData(GL_ARRAY_BUFFER, m_batch.size() * sizeof(Vertex), m_batch.data(), GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_color_buffer);
+    glBufferData(GL_ARRAY_BUFFER, m_colors.size() * sizeof(glm::vec4), m_colors.data(), GL_STATIC_DRAW);
+
     glUseProgram(m_program);
     glBindVertexArray(m_vertex_array);
 
-    std::array vertices {
-        Vertex({ x0, y0 }),
-        Vertex({ x1, y1 }),
-    };
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
-
-    glm::mat4 model(1.0f);
-    glm::mat4 view(1.0f);
-
-    glm::mat4 projection = glm::ortho(
-        0.0f,
-        static_cast<float>(m_window.get_width()),
-        static_cast<float>(m_window.get_height()),
-        0.0f
-    );
-
-    glm::mat4 mvp = projection * view * model;
-    GLint u_mvp = glGetUniformLocation(m_program, "u_mvp");
-    glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
-
-    GLint u_color = glGetUniformLocation(m_program, "u_color");
-    auto c = color.normalized();
-    glUniform4f(u_color, c.r, c.g, c.b, c.a);
-
-    glDrawArrays(GL_LINES, 0, vertices.size());
-
+    glDrawArrays(GL_LINES, 0, m_batch.size());
+    m_batch.clear();
+    m_colors.clear();
 }
 
 } // namespace detail

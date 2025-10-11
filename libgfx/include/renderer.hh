@@ -87,6 +87,7 @@ private:
     void flush() {
         m_rectangle.flush();
         m_texture.flush();
+        m_line.flush();
     }
 
     void calculate_frame_time() {

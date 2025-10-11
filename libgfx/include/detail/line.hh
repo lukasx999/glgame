@@ -1,6 +1,5 @@
 #pragma once
 
-#include <array>
 #include <vector>
 
 #include <window.hh>
@@ -14,11 +13,18 @@ class LineRenderer {
 
     GLuint m_program;
     GLuint m_vertex_array;
+    GLuint m_color_buffer;
     GLuint m_vertex_buffer;
+
+    // colors are stored in an instanced array
+    std::vector<glm::vec4> m_colors;
+    // accumulator used for batch rendering
+    std::vector<Vertex> m_batch;
 
 public:
     explicit LineRenderer(gfx::Window& window);
     void draw(int x0, int y0, int x1, int y1, gfx::Color color);
+    void flush();
 
 };
 

@@ -1,3 +1,5 @@
+// THIS FILE IS GENERATED
+
 #pragma once
 
 namespace shaders {
@@ -6,6 +8,11 @@ namespace vertex {
 
 inline constexpr char default_[] = {
 #embed "../shaders/default.vert" suffix(,)
+'\0'
+};
+
+inline constexpr char line[] = {
+#embed "../shaders/line.vert" suffix(,)
 '\0'
 };
 
@@ -23,13 +30,18 @@ inline constexpr char texture[] = {
 
 namespace fragment {
 
-inline constexpr char default_[] = {
-#embed "../shaders/default.frag" suffix(,)
+inline constexpr char circle[] = {
+#embed "../shaders/circle.frag" suffix(,)
 '\0'
 };
 
-inline constexpr char rectangle[] = {
-#embed "../shaders/rectangle.frag" suffix(,)
+inline constexpr char line[] = {
+#embed "../shaders/line.frag" suffix(,)
+'\0'
+};
+
+inline constexpr char default_[] = {
+#embed "../shaders/default.frag" suffix(,)
 '\0'
 };
 
@@ -38,8 +50,8 @@ inline constexpr char texture[] = {
 '\0'
 };
 
-inline constexpr char circle[] = {
-#embed "../shaders/circle.frag" suffix(,)
+inline constexpr char rectangle[] = {
+#embed "../shaders/rectangle.frag" suffix(,)
 '\0'
 };
 

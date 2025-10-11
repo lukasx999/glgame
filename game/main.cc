@@ -56,7 +56,7 @@ void draw_spiked_ball(gfx::Renderer& rd, float step) {
     int height = rd.get_window().get_height();
     int width = rd.get_window().get_width();
 
-    for (float angle = 0; angle < 360; angle += step) {
+    for (float angle = 0; angle <= 360; angle += step) {
         Vec midpoint(width/2.0f, height/2.0f);
         Vec pos(0, 200);
 
@@ -74,7 +74,7 @@ int main() {
     gfx::Window window(600, 600, "GLGame", false);
     gfx::Renderer rd(window);
 
-    gfx::Texture tex("./awesomeface.png");
+    // gfx::Texture tex("./awesomeface.png");
 
     while (!window.should_close()) {
         rd.with_draw_context([&]() {
@@ -82,7 +82,7 @@ int main() {
             rd.clear_background(Color::black());
             std::println("fps: {}", std::round(rd.get_fps()));
 
-            draw_spiked_ball(rd, 0.01);
+            draw_spiked_ball(rd, 0.001);
 
             // render_grid(rd, 300, 5, 0x595959ff);
             // render_grid_textured(rd, 300, 50, tex);

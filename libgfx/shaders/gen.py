@@ -45,7 +45,8 @@ def split_shader_types(shaders_filenames: list[str]) -> tuple[list[str], list[st
     return vertex_shaders, fragment_shaders
 
 def main():
-    file = open("shaders.hh", "w")
+    file = open("../src/shaders.hh", "w")
+    file.write("// THIS FILE IS GENERATED\n\n");
     file.write("#pragma once\n\n");
     file.write("namespace shaders {\n\n");
 

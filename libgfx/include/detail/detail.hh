@@ -7,11 +7,23 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+#include <window.hh>
+
 namespace detail {
 
 struct Vertex {
     glm::vec2 m_position;
 };
+
+[[nodiscard]] inline constexpr
+float x_to_ndc(gfx::Window& window, float x) {
+    return x / window.get_width() * 2.0f - 1.0f;
+}
+
+[[nodiscard]] inline constexpr
+float y_to_ndc(gfx::Window& window, float y) {
+    return -(y / window.get_height() * 2.0f - 1.0f);
+}
 
 [[nodiscard]] inline GLuint create_shader(GLenum type, const char* src) {
     GLuint shader = glCreateShader(type);
