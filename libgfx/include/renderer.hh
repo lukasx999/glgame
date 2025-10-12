@@ -81,9 +81,13 @@ public:
         m_line.draw(x0, y0, x1, y1, color);
     }
 
-    void draw_text(int x, int y, const char* text) {
-        m_text.draw(x, y, text);
+    void draw_text(int x, int y, const char* text, const gfx::Font& font) {
+        m_text.draw(x, y, text, font);
     }
+
+    // [[nodiscard]] gfx::Font load_font(const char* path) const {
+    //     return m_text.load_font(path);
+    // }
 
     void clear_background(Color color) {
         auto normalized = color.normalized();

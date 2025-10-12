@@ -9,7 +9,7 @@
 
 #include <window.hh>
 
-namespace detail {
+namespace gfx::detail {
 
 struct Vertex {
     glm::vec2 m_position;
@@ -69,4 +69,4 @@ float y_to_ndc(gfx::Window& window, float y) {
     return program;
 }
 
-} // namespace detail
+} // namespace gfx::detail

@@ -4,7 +4,22 @@
 #include <filesystem>
 #include <cstdint>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 namespace gfx {
+
+class Font {
+    // friend class gfx::detail::TextRenderer;
+    FT_Face m_face;
+    explicit Font(FT_Face face) : m_face(face) { }
+
+public:
+    ~Font() {
+        FT_Done_Face(m_face);
+    }
+
+};
 
 class IRotation {
 public:

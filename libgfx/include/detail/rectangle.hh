@@ -7,7 +7,7 @@
 #include <types.hh>
 #include <detail/detail.hh>
 
-namespace detail {
+namespace gfx::detail {
 
 class RectangleRenderer {
     gfx::Window& m_window;
@@ -44,4 +44,4 @@ public:
 
 };
 
-} // namespace detail
+} // namespace gfx::detail

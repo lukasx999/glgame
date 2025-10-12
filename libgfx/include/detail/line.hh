@@ -6,7 +6,7 @@
 #include <types.hh>
 #include <detail/detail.hh>
 
-namespace detail {
+namespace gfx::detail {
 
 class LineRenderer {
     gfx::Window& m_window;
@@ -28,4 +28,4 @@ public:
 
 };
 
-} // namespace detail
+} // namespace gfx::detail

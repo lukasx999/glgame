@@ -75,6 +75,7 @@ int main() {
     gfx::Renderer rd(window);
 
     // gfx::Texture tex("./awesomeface.png");
+    gfx::Font font("/usr/share/fonts/TTF/Roboto-Regular.ttf");
 
     while (!window.should_close()) {
         rd.with_draw_context([&]() {
@@ -82,7 +83,7 @@ int main() {
             rd.clear_background(Color::black());
             std::println("fps: {}", std::round(rd.get_fps()));
 
-            rd.draw_text(0, 0, "hello, world!");
+            rd.draw_text(0, 0, "hello, world!", font);
 
             // draw_spiked_ball(rd, 0.001);
 

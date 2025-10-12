@@ -7,7 +7,7 @@
 #include <types.hh>
 #include <detail/detail.hh>
 
-namespace detail {
+namespace gfx::detail {
 
 class TextureRenderer {
     gfx::Window& m_window;
@@ -70,4 +70,4 @@ private:
 
 };
 
-} // namespace detail
+} // namespace gfx::detail
