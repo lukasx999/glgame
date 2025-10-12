@@ -13,6 +13,13 @@ namespace detail {
 class TextRenderer;
 } // namespace detail
 
+struct Character {
+    unsigned int width;
+    unsigned int height;
+    unsigned int advance;
+    unsigned char* buffer;
+};
+
 class Font {
     friend detail::TextRenderer;
     FT_Face m_face;
@@ -26,6 +33,27 @@ public:
 
     ~Font() {
         FT_Done_Face(m_face);
+    }
+
+    [[nodiscard]] Character load_char(char c, int size) const {
+
+        FT_Set_Pixel_Sizes(m_face, 0, size);
+
+        if (FT_Load_Char(m_face, c, FT_LOAD_RENDER) != 0) {
+            throw std::runtime_error("failed to load char");
+        }
+
+        unsigned int width = m_face->glyph->bitmap.width;
+        unsigned int height = m_face->glyph->bitmap.rows;
+        unsigned int advance = m_face->glyph->advance.x;
+        unsigned char* buffer = m_face->glyph->bitmap.buffer;
+
+        return Character {
+            width,
+            height,
+            advance,
+            buffer,
+        };
     }
 
 };
@@ -74,9 +102,10 @@ class Texture {
     int m_height;
     int m_channels;
     unsigned char* m_data;
+    // TODO: move opengl texture loading into here
 
 public:
-    Texture(std::filesystem::path path);
+    Texture(const char* path);
     ~Texture();
 
     [[nodiscard]] unsigned char* get_data() const {

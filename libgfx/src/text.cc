@@ -43,23 +43,15 @@ TextRenderer::~TextRenderer() {
     FT_Done_FreeType(m_ft);
 }
 
-void TextRenderer::draw(int x, int y, const char* text, const gfx::Font& font) {
+void TextRenderer::draw_char(int x, int y, const Character& c) {
 
     glUseProgram(m_program);
     glBindVertexArray(m_vertex_array);
 
-    FT_Set_Pixel_Sizes(font.m_face, 0, 100);
-
-    if (FT_Load_Char(font.m_face, 'X', FT_LOAD_RENDER) != 0) {
-        throw std::runtime_error("failed to load char");
-    }
-
-    unsigned int width = font.m_face->glyph->bitmap.width;
-    unsigned int height = font.m_face->glyph->bitmap.rows;
 
     glm::mat4 model(1.0f);
     model = glm::translate(model, glm::vec3(x, y, 0.0f));
-    model = glm::scale(model, glm::vec3(width, height, 0.0f));
+    model = glm::scale(model, glm::vec3(c.width, c.height, 0.0f));
 
     glm::mat4 projection = glm::ortho(
         0.0f,
@@ -71,6 +63,7 @@ void TextRenderer::draw(int x, int y, const char* text, const gfx::Font& font) {
     glm::mat4 mvp = projection * model;
     GLint u_mvp = glGetUniformLocation(m_program, "u_mvp");
     glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
+
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
 
@@ -88,15 +81,26 @@ void TextRenderer::draw(int x, int y, const char* text, const gfx::Font& font) {
         GL_TEXTURE_2D,
         0,
         GL_RED,
-        width,
-        height,
+        c.width,
+        c.height,
         0,
         GL_RED,
         GL_UNSIGNED_BYTE,
-        font.m_face->glyph->bitmap.buffer
+        c.buffer
     );
 
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
+}
+
+void TextRenderer::draw(int x, int y, int text_size, const char* text, const gfx::Font& font) {
+    int offset = 0;
+
+    for (const char* c = text; *c; ++c) {
+        auto character = font.load_char(*c, text_size);
+        draw_char(x+offset, y, character);
+        offset += character.advance;
+    }
+
 }
 
 } // namespace gfx::detail

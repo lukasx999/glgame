@@ -41,7 +41,7 @@ class TextRenderer {
 public:
     TextRenderer(gfx::Window& window);
     ~TextRenderer();
-    void draw(int x, int y, const char* text, const gfx::Font& font);
+    void draw(int x, int y, int text_size, const char* text, const gfx::Font& font);
 
     [[nodiscard]] gfx::Font load_font(const char* path) const {
         FT_Face face;
@@ -50,6 +50,9 @@ public:
         }
         return gfx::Font(face);
     }
+
+private:
+    void draw_char(int x, int y, const Character& c);
 
 };
 
