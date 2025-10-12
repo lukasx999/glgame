@@ -15,7 +15,7 @@ class RectangleRenderer {
     GLuint m_program;
     GLuint m_vertex_array;
     GLuint m_vertex_buffer;
-    GLuint m_transform_buffer;
+    GLuint m_instance_buffer;
     GLuint m_index_buffer;
 
     struct InstanceData {

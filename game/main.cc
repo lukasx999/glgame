@@ -77,7 +77,6 @@ int main() {
     gfx::Texture tex("./awesomeface.png");
     // gfx::Font font = rd.load_font("/usr/share/fonts/TTF/Roboto-Regular.ttf");
     gfx::Font font = rd.load_font("/usr/share/fonts/TTF/JetBrainsMonoNerdFont-Regular.ttf");
-    auto glyph = font.load_glyph('x', 50);
 
     while (!window.should_close()) {
         rd.with_draw_context([&]() {
@@ -86,11 +85,13 @@ int main() {
             std::println("fps: {}", std::round(rd.get_fps()));
 
             // rd.draw_text(0, 0, 50, "hello, world!", font);
-            // rd.draw_texture(0, 0, 500, 500, 0_deg, tex);
-            rd.draw_text(0, 0, 50, "ABCDEF", font);
+            rd.draw_texture(0, 0, 500, 500, 0_deg, tex);
 
             // draw_spiked_ball(rd, 0.001);
+            // rd.draw_rectangle(0, 0, 50, 50, 0_deg, gfx::Color::red());
 
+            // render_grid_triangles(rd, 50, 15, gfx::Color::blue());
+            // rd.draw_text(0, 0, 50, "ABCDEF", font);
             // render_grid(rd, 300, 5, 0x595959ff);
             // render_grid_textured(rd, 700, 5, tex);
 

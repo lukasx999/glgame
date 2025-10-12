@@ -34,6 +34,7 @@ TextureRenderer::TextureRenderer(gfx::Window& window)
     glVertexAttribPointer(a_uv, 2, GL_FLOAT, false, sizeof(glm::vec2), nullptr);
     glEnableVertexAttribArray(a_uv);
 
+
     glGenBuffers(1, &m_index_buffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
@@ -73,8 +74,6 @@ void TextureRenderer::draw(int x, int y, int width, int height, const gfx::IRota
     model = glm::translate(model, glm::vec3(-width/2, -height/2, 0.0f));
     model = glm::scale(model, glm::vec3(width, height, 0.0f));
 
-    glm::mat4 view(1.0f);
-
     glm::mat4 projection = glm::ortho(
         0.0f,
         static_cast<float>(m_window.get_width()),
@@ -82,7 +81,7 @@ void TextureRenderer::draw(int x, int y, int width, int height, const gfx::IRota
         0.0f
     );
 
-    glm::mat4 mvp = projection * view * model;
+    glm::mat4 mvp = projection * model;
 
     if (m_group_data.contains(texture.m_data)) {
         RenderGroup& group = m_group_data.at(texture.m_data);
@@ -107,7 +106,7 @@ void TextureRenderer::flush() {
             GL_ARRAY_BUFFER,
             transforms.size() * sizeof(glm::mat4),
             transforms.data(),
-            GL_STATIC_DRAW
+            GL_DYNAMIC_DRAW
         );
 
         glBindTexture(GL_TEXTURE_2D, texture.m_texture);

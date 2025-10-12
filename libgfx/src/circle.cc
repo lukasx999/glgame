@@ -11,22 +11,25 @@ namespace gfx::detail {
 CircleRenderer::CircleRenderer(gfx::Window& window)
 : m_window(window)
 {
+    m_program = create_shader_program(shaders::vertex::default_, shaders::fragment::circle);
+
     glGenVertexArrays(1, &m_vertex_array);
     glBindVertexArray(m_vertex_array);
+
 
     glGenBuffers(1, &m_vertex_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
     glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
 
+    GLint a_pos = glGetAttribLocation(m_program, "a_pos");
+    glVertexAttribPointer(a_pos, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, m_position)));
+    glEnableVertexAttribArray(a_pos);
+
+
     glGenBuffers(1, &m_index_buffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
 
-    m_program = create_shader_program(shaders::vertex::default_, shaders::fragment::circle);
-
-    GLint a_pos = glGetAttribLocation(m_program, "a_pos");
-    glVertexAttribPointer(a_pos, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, m_position)));
-    glEnableVertexAttribArray(a_pos);
 
     // just to make sure everything still works after unbinding, as other classes/functions may
     // modify opengl state after running the ctor
@@ -37,6 +40,10 @@ CircleRenderer::CircleRenderer(gfx::Window& window)
 }
 
 void CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
+
+    glBindVertexArray(m_vertex_array);
+    glUseProgram(m_program);
+
     glm::mat4 model(1.0f);
     // square is placed at the center of the circle
     model = glm::translate(model, glm::vec3(x-radius, y-radius, 0.0f));
@@ -50,8 +57,6 @@ void CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
     );
 
     glm::mat4 mvp = projection * model;
-
-    glUseProgram(m_program);
 
     GLint u_mvp = glGetUniformLocation(m_program, "u_mvp");
     glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
@@ -69,7 +74,6 @@ void CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
     auto normalized = color.normalized();
     glUniform4f(u_color, normalized.r, normalized.g, normalized.b, normalized.a);
 
-    glBindVertexArray(m_vertex_array);
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 

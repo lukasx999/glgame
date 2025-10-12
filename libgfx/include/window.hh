@@ -1,5 +1,6 @@
 #pragma once
 
+#include <print>
 #include <stdexcept>
 #include <functional>
 
@@ -62,6 +63,20 @@ public:
 private:
     [[nodiscard]] static GLFWwindow* init_glfw(int width, int height, const char* window_title, bool resizable_window);
     [[nodiscard]] static int gfx_key_to_glfw_key(Key key);
+
+    static void debug_message_callback(
+        [[maybe_unused]] GLenum source,
+        [[maybe_unused]] GLenum type,
+        [[maybe_unused]] GLuint id,
+        GLenum severity,
+        [[maybe_unused]] GLsizei length,
+        const GLchar *message,
+        [[maybe_unused]] const void *user_param
+    ) {
+
+        if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) return;
+        std::println(stderr, "opengl error: {}", message);
+    }
 
 };
 

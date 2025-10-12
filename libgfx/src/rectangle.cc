@@ -31,8 +31,8 @@ RectangleRenderer::RectangleRenderer(gfx::Window& window)
 
     // using uniform mat4[]'s is not a good idea, as they have a very low size limit
     // therefore we use an instanced array
-    glGenBuffers(1, &m_transform_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, m_transform_buffer);
+    glGenBuffers(1, &m_instance_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_instance_buffer);
 
     // there is no way to directly set the attrib pointer for an `in mat4`, but
     // we can just treat it as 4 `in vec4`'s using this workaround:
@@ -108,7 +108,7 @@ void RectangleRenderer::draw(int x, int y, int width, int height, const gfx::IRo
 
 void RectangleRenderer::flush() {
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_transform_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_instance_buffer);
     glBufferData(GL_ARRAY_BUFFER, m_instance_data.size() * sizeof(InstanceData), m_instance_data.data(), GL_STATIC_DRAW);
 
     glUseProgram(m_program);

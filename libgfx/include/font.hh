@@ -49,6 +49,7 @@ public:
         return result;
     }
 
+private:
     [[nodiscard]] detail::Glyph load_glyph(char c, int size) const {
 
         if (FT_Set_Pixel_Sizes(m_face, 0, size)) {

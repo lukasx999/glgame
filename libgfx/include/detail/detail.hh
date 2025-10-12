@@ -11,6 +11,12 @@
 
 namespace gfx::detail {
 
+inline void set_vertex_attrib_pointer(GLuint program, const char* name, GLint size, GLenum type, GLsizei stride, size_t offset) {
+    GLint loc = glGetAttribLocation(program, name);
+    glVertexAttribPointer(loc, size, type, false, stride, reinterpret_cast<void*>(offset));
+    glEnableVertexAttribArray(loc);
+}
+
 struct Vertex {
     glm::vec2 m_position;
 };
