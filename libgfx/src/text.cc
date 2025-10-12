@@ -36,22 +36,20 @@ TextRenderer::TextRenderer(gfx::Window& window)
         throw std::runtime_error("failed to initialize ft2");
     }
 
-
 }
 
 TextRenderer::~TextRenderer() {
     FT_Done_FreeType(m_ft);
 }
 
-void TextRenderer::draw_char(int x, int y, const Character& c) {
+void TextRenderer::draw_char(int x, int y, const Glyph& glyph) {
 
     glUseProgram(m_program);
     glBindVertexArray(m_vertex_array);
 
-
     glm::mat4 model(1.0f);
     model = glm::translate(model, glm::vec3(x, y, 0.0f));
-    model = glm::scale(model, glm::vec3(c.width, c.height, 0.0f));
+    model = glm::scale(model, glm::vec3(glyph.width, glyph.height, 0.0f));
 
     glm::mat4 projection = glm::ortho(
         0.0f,
@@ -63,7 +61,6 @@ void TextRenderer::draw_char(int x, int y, const Character& c) {
     glm::mat4 mvp = projection * model;
     GLint u_mvp = glGetUniformLocation(m_program, "u_mvp");
     glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
-
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
 
@@ -77,17 +74,7 @@ void TextRenderer::draw_char(int x, int y, const Character& c) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    glTexImage2D(
-        GL_TEXTURE_2D,
-        0,
-        GL_RED,
-        c.width,
-        c.height,
-        0,
-        GL_RED,
-        GL_UNSIGNED_BYTE,
-        c.buffer
-    );
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, glyph.width, glyph.height, 0, GL_RED, GL_UNSIGNED_BYTE, glyph.buffer);
 
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
 }
@@ -96,9 +83,9 @@ void TextRenderer::draw(int x, int y, int text_size, const char* text, const gfx
     int offset = 0;
 
     for (const char* c = text; *c; ++c) {
-        auto character = font.load_char(*c, text_size);
-        draw_char(x+offset, y, character);
-        offset += character.advance;
+        auto glyph = font.load_glyph(*c, text_size);
+        draw_char(x+offset, y, glyph);
+        offset += glyph.advance;
     }
 
 }

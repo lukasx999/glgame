@@ -7,8 +7,8 @@
 namespace gfx {
 
 struct Vec {
-    float x;
-    float y;
+    float x = 0.0f;
+    float y = 0.0f;
 
     constexpr bool operator<=>(const Vec& other) const = default;
 

@@ -44,15 +44,11 @@ public:
     void draw(int x, int y, int text_size, const char* text, const gfx::Font& font);
 
     [[nodiscard]] gfx::Font load_font(const char* path) const {
-        FT_Face face;
-        if (FT_New_Face(m_ft, path, 0, &face) != 0) {
-            throw std::runtime_error("failed to load font");
-        }
-        return gfx::Font(face);
+        return { m_ft, path };
     }
 
 private:
-    void draw_char(int x, int y, const Character& c);
+    void draw_char(int x, int y, const Glyph& glyph);
 
 };
 

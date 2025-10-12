@@ -13,9 +13,11 @@ namespace detail {
 class TextRenderer;
 } // namespace detail
 
-struct Character {
+struct Glyph {
     unsigned int width;
     unsigned int height;
+    int bearing_x;
+    int bearing_y;
     unsigned int advance;
     unsigned char* buffer;
 };
@@ -23,7 +25,12 @@ struct Character {
 class Font {
     friend detail::TextRenderer;
     FT_Face m_face;
-    explicit Font(FT_Face face) : m_face(face) { }
+
+    Font(FT_Library ft, const char* path) {
+        if (FT_New_Face(ft, path, 0, &m_face) != 0) {
+            throw std::runtime_error("failed to load font");
+        }
+    }
 
 public:
     Font(const Font&) = delete;
@@ -35,9 +42,11 @@ public:
         FT_Done_Face(m_face);
     }
 
-    [[nodiscard]] Character load_char(char c, int size) const {
+    [[nodiscard]] Glyph load_glyph(char c, int size) const {
 
-        FT_Set_Pixel_Sizes(m_face, 0, size);
+        if (FT_Set_Pixel_Sizes(m_face, 0, size)) {
+            throw std::runtime_error("failed to set pixel size");
+        }
 
         if (FT_Load_Char(m_face, c, FT_LOAD_RENDER) != 0) {
             throw std::runtime_error("failed to load char");
@@ -45,13 +54,18 @@ public:
 
         unsigned int width = m_face->glyph->bitmap.width;
         unsigned int height = m_face->glyph->bitmap.rows;
+        int bearing_x = m_face->glyph->bitmap_left;
+        int bearing_y = m_face->glyph->bitmap_top;
         unsigned int advance = m_face->glyph->advance.x;
         unsigned char* buffer = m_face->glyph->bitmap.buffer;
 
-        return Character {
+        return Glyph {
             width,
             height,
-            advance,
+            bearing_x,
+            bearing_y,
+            // advance is pixels * 64
+            advance / 64,
             buffer,
         };
     }
