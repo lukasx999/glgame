@@ -13,6 +13,7 @@ namespace detail {
 class TextRenderer;
 } // namespace detail
 
+// TODO: should probably be private
 struct Glyph {
     unsigned int width;
     unsigned int height;
@@ -22,6 +23,7 @@ struct Glyph {
     unsigned char* buffer;
 };
 
+// TODO: text measurement
 class Font {
     friend detail::TextRenderer;
     FT_Face m_face;
@@ -72,6 +74,14 @@ public:
 
 };
 
+[[nodiscard]] inline constexpr float deg_to_rad(float deg) {
+    return deg * (M_PI / 180.0);
+}
+
+[[nodiscard]] inline constexpr float rad_to_deg(float rad) {
+    return rad * (180.0 / M_PI);
+}
+
 class IRotation {
 public:
     [[nodiscard]] virtual float get_radians() const = 0;
@@ -90,7 +100,7 @@ public:
     }
 
     [[nodiscard]] constexpr float get_degrees() const override {
-        return m_radians * (180.0 / M_PI);
+        return rad_to_deg(m_radians);
     }
 
 };
@@ -102,7 +112,7 @@ public:
     explicit constexpr Degrees(float degrees) : m_degrees(degrees) { }
 
     [[nodiscard]] constexpr float get_radians() const override {
-        return m_degrees * (M_PI / 180.0);
+        return deg_to_rad(m_degrees);
     }
 
     [[nodiscard]] constexpr float get_degrees() const override {
