@@ -6,24 +6,14 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include <detail/detail.hh>
+
 namespace gfx {
 
 namespace detail {
 class TextRenderer;
 } // namespace detail
 
-// TODO: should probably be private
-struct Glyph {
-    GLuint texture;
-    unsigned int width;
-    unsigned int height;
-    int bearing_x;
-    int bearing_y;
-    unsigned int advance;
-    unsigned char* buffer;
-};
-
-// TODO: text measurement
 class Font {
     FT_Face m_face;
 
@@ -45,7 +35,21 @@ public:
         FT_Done_Face(m_face);
     }
 
-    [[nodiscard]] Glyph load_glyph(char c, int size) const {
+    [[nodiscard]] int measure_char(char c, int size) const {
+        return load_glyph(c, size).advance;
+    }
+
+    [[nodiscard]] int measure_text(const char* text, int size) const {
+        int result = 0;
+
+        for (const char* c = text; *c; ++c) {
+            result += measure_char(*c, size);
+        }
+
+        return result;
+    }
+
+    [[nodiscard]] detail::Glyph load_glyph(char c, int size) const {
 
         if (FT_Set_Pixel_Sizes(m_face, 0, size)) {
             throw std::runtime_error("failed to set pixel size");
@@ -78,7 +82,7 @@ public:
 
         glBindTexture(GL_TEXTURE_2D, 0);
 
-        return Glyph {
+        return {
             texture,
             width,
             height,

@@ -27,10 +27,10 @@ class TextureRenderer {
     };
 
     static constexpr std::array m_uvs {
-        glm::vec2(1.0, 0.0), // top-right
-        glm::vec2(0.0, 0.0), // top-left
-        glm::vec2(0.0, 1.0), // bottom-left
-        glm::vec2(1.0, 1.0), // bottom-right
+        glm::vec2(1.0, 1.0), // top-right
+        glm::vec2(0.0, 1.0), // top-left
+        glm::vec2(0.0, 0.0), // bottom-left
+        glm::vec2(1.0, 0.0), // bottom-right
     };
 
     static constexpr std::array m_indices {

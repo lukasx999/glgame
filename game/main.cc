@@ -86,7 +86,7 @@ int main() {
             std::println("fps: {}", std::round(rd.get_fps()));
 
             // rd.draw_text(0, 0, 50, "hello, world!", font);
-            rd.draw_texture(0, 0, 500, 500, 0_deg, tex);
+            // rd.draw_texture(0, 0, 500, 500, 0_deg, tex);
             rd.draw_text(0, 0, 50, "ABCDEF", font);
 
             // draw_spiked_ball(rd, 0.001);

@@ -15,6 +15,16 @@ struct Vertex {
     glm::vec2 m_position;
 };
 
+struct Glyph {
+    GLuint texture;
+    unsigned int width;
+    unsigned int height;
+    int bearing_x;
+    int bearing_y;
+    unsigned int advance;
+    unsigned char* buffer;
+};
+
 [[nodiscard]] inline constexpr
 float x_to_ndc(gfx::Window& window, float x) {
     return x / window.get_width() * 2.0f - 1.0f;
