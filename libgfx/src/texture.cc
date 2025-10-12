@@ -26,9 +26,9 @@ TextureRenderer::TextureRenderer(gfx::Window& window)
     glEnableVertexAttribArray(a_pos);
 
 
-    glGenBuffers(1, &m_tex_coord_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, m_tex_coord_buffer);
-    glBufferData(GL_ARRAY_BUFFER, m_tex_coords.size() * sizeof(glm::vec2), m_tex_coords.data(), GL_STATIC_DRAW);
+    glGenBuffers(1, &m_uv_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_uv_buffer);
+    glBufferData(GL_ARRAY_BUFFER, m_uvs.size() * sizeof(glm::vec2), m_uvs.data(), GL_STATIC_DRAW);
 
     GLint a_uv = glGetAttribLocation(m_program, "a_uv");
     glVertexAttribPointer(a_uv, 2, GL_FLOAT, false, sizeof(glm::vec2), nullptr);
@@ -96,11 +96,6 @@ void TextureRenderer::draw(int x, int y, int width, int height, const gfx::IRota
 
 void TextureRenderer::flush() {
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
     glUseProgram(m_program);
     glBindVertexArray(m_vertex_array);
 
@@ -108,6 +103,11 @@ void TextureRenderer::flush() {
     glGenTextures(1, &gl_texture);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, gl_texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     for (auto& [key, value] : m_group_data) {
         auto& [texture, transforms] = value;

@@ -7,6 +7,7 @@ project(Game)
 include_directories(../libgfx/subprojects/glad/include)
 include_directories(../libgfx/include)
 link_directories(../libgfx/build)
+include_directories(/usr/include/freetype2/)
 
 add_executable(game main.cc)
-target_link_libraries(game PRIVATE gfx glfw)
+target_link_libraries(game PRIVATE gfx glfw freetype)

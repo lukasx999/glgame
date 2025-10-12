@@ -8,4 +8,5 @@ triangle.cc
 texture.cc
 types.cc
 line.cc
+text.cc
 )

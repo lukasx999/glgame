@@ -10,6 +10,7 @@
 #include <detail/triangle.hh>
 #include <detail/texture.hh>
 #include <detail/line.hh>
+#include <detail/text.hh>
 
 #include <types.hh>
 #include <window.hh>
@@ -30,6 +31,7 @@ class Renderer {
     detail::TriangleRenderer m_triangle;
     detail::TextureRenderer m_texture;
     detail::LineRenderer m_line;
+    detail::TextRenderer m_text;
 
     double m_frame_time = 0.0;
     double m_last_frame = 0.0;
@@ -42,6 +44,7 @@ public:
         , m_triangle(m_window)
         , m_texture(m_window)
         , m_line(m_window)
+        , m_text(m_window)
     { }
 
     [[nodiscard]] Window& get_window() const {
@@ -76,6 +79,10 @@ public:
 
     void draw_line(int x0, int y0, int x1, int y1, gfx::Color color) {
         m_line.draw(x0, y0, x1, y1, color);
+    }
+
+    void draw_text(int x, int y, const char* text) {
+        m_text.draw(x, y, text);
     }
 
     void clear_background(Color color) {

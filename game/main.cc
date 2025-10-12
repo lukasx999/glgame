@@ -82,7 +82,9 @@ int main() {
             rd.clear_background(Color::black());
             std::println("fps: {}", std::round(rd.get_fps()));
 
-            draw_spiked_ball(rd, 0.001);
+            rd.draw_text(0, 0, "hello, world!");
+
+            // draw_spiked_ball(rd, 0.001);
 
             // render_grid(rd, 300, 5, 0x595959ff);
             // render_grid_textured(rd, 300, 50, tex);

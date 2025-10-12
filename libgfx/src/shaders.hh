@@ -11,6 +11,11 @@ inline constexpr char default_[] = {
 '\0'
 };
 
+inline constexpr char text[] = {
+#embed "../shaders/text.vert" suffix(,)
+'\0'
+};
+
 inline constexpr char line[] = {
 #embed "../shaders/line.vert" suffix(,)
 '\0'
@@ -52,6 +57,11 @@ inline constexpr char texture[] = {
 
 inline constexpr char rectangle[] = {
 #embed "../shaders/rectangle.frag" suffix(,)
+'\0'
+};
+
+inline constexpr char text[] = {
+#embed "../shaders/text.frag" suffix(,)
 '\0'
 };
 
