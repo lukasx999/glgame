@@ -9,7 +9,7 @@
 #include <detail/detail.hh>
 #include "shaders.hh"
 
-namespace detail {
+namespace gfx::detail {
 
 LineRenderer::LineRenderer(gfx::Window& window)
 : m_window(window)
@@ -68,4 +68,4 @@ void LineRenderer::flush() {
     m_colors.clear();
 }
 
-} // namespace detail
+} // namespace gfx::detail

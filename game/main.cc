@@ -75,7 +75,7 @@ int main() {
     gfx::Renderer rd(window);
 
     // gfx::Texture tex("./awesomeface.png");
-    gfx::Font font("/usr/share/fonts/TTF/Roboto-Regular.ttf");
+    gfx::Font font = rd.load_font("/usr/share/fonts/TTF/Roboto-Regular.ttf");
 
     while (!window.should_close()) {
         rd.with_draw_context([&]() {

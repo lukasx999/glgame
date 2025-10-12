@@ -2,7 +2,7 @@
 #include <detail/text.hh>
 #include <detail/detail.hh>
 
-namespace detail {
+namespace gfx::detail {
 
 TextRenderer::TextRenderer(gfx::Window& window)
 : m_window(window) {
@@ -45,59 +45,58 @@ TextRenderer::~TextRenderer() {
 
 void TextRenderer::draw(int x, int y, const char* text, const gfx::Font& font) {
 
-    // glUseProgram(m_program);
-    // glBindVertexArray(m_vertex_array);
-    //
-    // FT_Set_Pixel_Sizes(m_face, 0, 100);
-    //
-    // if (FT_Load_Char(m_face, 'X', FT_LOAD_RENDER) != 0) {
-    //     throw std::runtime_error("failed to load char");
-    // }
-    //
-    // unsigned int width = m_face->glyph->bitmap.width;
-    // unsigned int height = m_face->glyph->bitmap.rows;
-    //
-    // glm::mat4 model(1.0f);
-    // model = glm::translate(model, glm::vec3(x, y, 0.0f));
-    // model = glm::scale(model, glm::vec3(width, height, 0.0f));
-    //
-    // glm::mat4 projection = glm::ortho(
-    //     0.0f,
-    //     static_cast<float>(m_window.get_width()),
-    //     static_cast<float>(m_window.get_height()),
-    //     0.0f
-    // );
-    //
-    // glm::mat4 mvp = projection * model;
-    // GLint u_mvp = glGetUniformLocation(m_program, "u_mvp");
-    // glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
-    //
-    // glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
-    //
-    // GLuint texture;
-    // glGenTextures(1, &texture);
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindTexture(GL_TEXTURE_2D, texture);
-    //
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //
-    // glTexImage2D(
-    //     GL_TEXTURE_2D,
-    //     0,
-    //     GL_RED,
-    //     m_face->glyph->bitmap.width,
-    //     m_face->glyph->bitmap.rows,
-    //     0,
-    //     GL_RED,
-    //     GL_UNSIGNED_BYTE,
-    //     m_face->glyph->bitmap.buffer
-    // );
-    //
-    // glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
+    glUseProgram(m_program);
+    glBindVertexArray(m_vertex_array);
 
+    FT_Set_Pixel_Sizes(font.m_face, 0, 100);
+
+    if (FT_Load_Char(font.m_face, 'X', FT_LOAD_RENDER) != 0) {
+        throw std::runtime_error("failed to load char");
+    }
+
+    unsigned int width = font.m_face->glyph->bitmap.width;
+    unsigned int height = font.m_face->glyph->bitmap.rows;
+
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, glm::vec3(x, y, 0.0f));
+    model = glm::scale(model, glm::vec3(width, height, 0.0f));
+
+    glm::mat4 projection = glm::ortho(
+        0.0f,
+        static_cast<float>(m_window.get_width()),
+        static_cast<float>(m_window.get_height()),
+        0.0f
+    );
+
+    glm::mat4 mvp = projection * model;
+    GLint u_mvp = glGetUniformLocation(m_program, "u_mvp");
+    glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(
+        GL_TEXTURE_2D,
+        0,
+        GL_RED,
+        width,
+        height,
+        0,
+        GL_RED,
+        GL_UNSIGNED_BYTE,
+        font.m_face->glyph->bitmap.buffer
+    );
+
+    glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
-} // namespace detail
+} // namespace gfx::detail

@@ -6,7 +6,7 @@
 #include <detail/circle.hh>
 #include "shaders.hh"
 
-namespace detail {
+namespace gfx::detail {
 
 CircleRenderer::CircleRenderer(gfx::Window& window)
 : m_window(window)
@@ -73,4 +73,4 @@ void CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
-} // namespace detail
+} // namespace gfx::detail

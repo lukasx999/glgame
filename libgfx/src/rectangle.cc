@@ -8,7 +8,7 @@
 #include <detail/rectangle.hh>
 #include "shaders.hh"
 
-namespace detail {
+namespace gfx::detail {
 
 RectangleRenderer::RectangleRenderer(gfx::Window& window)
 : m_window(window)
@@ -125,4 +125,4 @@ void RectangleRenderer::flush() {
     m_instance_data.clear();
 }
 
-} // namespace detail
+} // namespace gfx::detail

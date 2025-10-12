@@ -8,7 +8,7 @@
 #include <detail/triangle.hh>
 #include "shaders.hh"
 
-namespace detail {
+namespace gfx::detail {
 
 TriangleRenderer::TriangleRenderer(gfx::Window& window)
 : m_window(window)
@@ -74,4 +74,4 @@ void TriangleRenderer::draw(
     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 }
 
-} // namespace detail
+} // namespace gfx::detail

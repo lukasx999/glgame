@@ -6,7 +6,7 @@
 #include <detail/texture.hh>
 #include "shaders.hh"
 
-namespace detail {
+namespace gfx::detail {
 
 TextureRenderer::TextureRenderer(gfx::Window& window)
 : m_window(window)
@@ -147,4 +147,4 @@ void TextureRenderer::flush() {
     m_group_data.clear();
 }
 
-} // namespace detail
+} // namespace gfx::detail

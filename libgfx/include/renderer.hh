@@ -85,9 +85,9 @@ public:
         m_text.draw(x, y, text, font);
     }
 
-    // [[nodiscard]] gfx::Font load_font(const char* path) const {
-    //     return m_text.load_font(path);
-    // }
+    [[nodiscard]] gfx::Font load_font(const char* path) const {
+        return m_text.load_font(path);
+    }
 
     void clear_background(Color color) {
         auto normalized = color.normalized();

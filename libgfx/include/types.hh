@@ -9,12 +9,21 @@
 
 namespace gfx {
 
+namespace detail {
+class TextRenderer;
+} // namespace detail
+
 class Font {
-    // friend class gfx::detail::TextRenderer;
+    friend detail::TextRenderer;
     FT_Face m_face;
     explicit Font(FT_Face face) : m_face(face) { }
 
 public:
+    Font(const Font&) = delete;
+    Font(Font&&) = delete;
+    Font& operator=(const Font&) = delete;
+    Font& operator=(Font&&) = delete;
+
     ~Font() {
         FT_Done_Face(m_face);
     }
