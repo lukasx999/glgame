@@ -1,78 +1,9 @@
 #pragma once
 
 #include <cmath>
-#include <filesystem>
 #include <cstdint>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 namespace gfx {
-
-namespace detail {
-class TextRenderer;
-} // namespace detail
-
-// TODO: should probably be private
-struct Glyph {
-    unsigned int width;
-    unsigned int height;
-    int bearing_x;
-    int bearing_y;
-    unsigned int advance;
-    unsigned char* buffer;
-};
-
-// TODO: text measurement
-class Font {
-    friend detail::TextRenderer;
-    FT_Face m_face;
-
-    Font(FT_Library ft, const char* path) {
-        if (FT_New_Face(ft, path, 0, &m_face) != 0) {
-            throw std::runtime_error("failed to load font");
-        }
-    }
-
-public:
-    Font(const Font&) = delete;
-    Font(Font&&) = delete;
-    Font& operator=(const Font&) = delete;
-    Font& operator=(Font&&) = delete;
-
-    ~Font() {
-        FT_Done_Face(m_face);
-    }
-
-    [[nodiscard]] Glyph load_glyph(char c, int size) const {
-
-        if (FT_Set_Pixel_Sizes(m_face, 0, size)) {
-            throw std::runtime_error("failed to set pixel size");
-        }
-
-        if (FT_Load_Char(m_face, c, FT_LOAD_RENDER) != 0) {
-            throw std::runtime_error("failed to load char");
-        }
-
-        unsigned int width = m_face->glyph->bitmap.width;
-        unsigned int height = m_face->glyph->bitmap.rows;
-        int bearing_x = m_face->glyph->bitmap_left;
-        int bearing_y = m_face->glyph->bitmap_top;
-        unsigned int advance = m_face->glyph->advance.x;
-        unsigned char* buffer = m_face->glyph->bitmap.buffer;
-
-        return Glyph {
-            width,
-            height,
-            bearing_x,
-            bearing_y,
-            // advance is pixels * 64
-            advance / 64,
-            buffer,
-        };
-    }
-
-};
 
 [[nodiscard]] inline constexpr float deg_to_rad(float deg) {
     return deg * (M_PI / 180.0);
@@ -118,41 +49,6 @@ public:
     [[nodiscard]] constexpr float get_degrees() const override {
         return m_degrees;
     }
-
-};
-
-class Texture {
-    int m_width;
-    int m_height;
-    int m_channels;
-    unsigned char* m_data;
-    // TODO: move opengl texture loading into here
-
-public:
-    Texture(const char* path);
-    ~Texture();
-
-    [[nodiscard]] unsigned char* get_data() const {
-        return m_data;
-    }
-
-    [[nodiscard]] int get_width() const {
-        return m_width;
-    }
-
-    [[nodiscard]] int get_height() const {
-        return m_height;
-    }
-
-    [[nodiscard]] int get_channels() const {
-        return m_channels;
-    }
-
-    // TODO: copy/move ctor
-    Texture(const Texture&) = delete;
-    Texture(Texture&&) = delete;
-    Texture& operator=(const Texture&) = delete;
-    Texture& operator=(Texture&&) = delete;
 
 };
 

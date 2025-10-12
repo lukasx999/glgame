@@ -4,6 +4,7 @@
 #include FT_FREETYPE_H
 
 #include <window.hh>
+#include <font.hh>
 #include <detail/detail.hh>
 
 namespace gfx::detail {
@@ -27,10 +28,10 @@ class TextRenderer {
     };
 
     static constexpr std::array m_uvs {
-        glm::vec2(1.0, 0.0),
-        glm::vec2(0.0, 0.0),
-        glm::vec2(0.0, 1.0),
-        glm::vec2(1.0, 1.0),
+        glm::vec2(1.0, 1.0), // top-right
+        glm::vec2(0.0, 1.0), // top-left
+        glm::vec2(0.0, 0.0), // bottom-left
+        glm::vec2(1.0, 0.0), // bottom-right
     };
 
     static constexpr std::array m_indices {

@@ -47,9 +47,12 @@ void TextRenderer::draw_char(int x, int y, const Glyph& glyph) {
     glUseProgram(m_program);
     glBindVertexArray(m_vertex_array);
 
+    int width = glyph.width;
+    int height = glyph.height;
+
     glm::mat4 model(1.0f);
-    model = glm::translate(model, glm::vec3(x, y, 0.0f));
-    model = glm::scale(model, glm::vec3(glyph.width, glyph.height, 0.0f));
+    model = glm::translate(model, glm::vec3(x+glyph.bearing_x, y, 0.0f));
+    model = glm::scale(model, glm::vec3(width, height, 0.0f));
 
     glm::mat4 projection = glm::ortho(
         0.0f,
@@ -62,20 +65,7 @@ void TextRenderer::draw_char(int x, int y, const Glyph& glyph) {
     GLint u_mvp = glGetUniformLocation(m_program, "u_mvp");
     glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
-
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, glyph.width, glyph.height, 0, GL_RED, GL_UNSIGNED_BYTE, glyph.buffer);
-
+    glBindTexture(GL_TEXTURE_2D, glyph.texture);
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 

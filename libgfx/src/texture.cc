@@ -84,12 +84,12 @@ void TextureRenderer::draw(int x, int y, int width, int height, const gfx::IRota
 
     glm::mat4 mvp = projection * view * model;
 
-    if (m_group_data.contains(texture.get_data())) {
-        RenderGroup& group = m_group_data.at(texture.get_data());
+    if (m_group_data.contains(texture.m_data)) {
+        RenderGroup& group = m_group_data.at(texture.m_data);
         group.transforms.push_back(std::move(mvp));
 
     } else {
-        m_group_data.emplace(texture.get_data(), RenderGroup(texture, {mvp}));
+        m_group_data.emplace(texture.m_data, RenderGroup(texture, {mvp}));
     }
 
 }
@@ -98,16 +98,6 @@ void TextureRenderer::flush() {
 
     glUseProgram(m_program);
     glBindVertexArray(m_vertex_array);
-
-    GLuint gl_texture;
-    glGenTextures(1, &gl_texture);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, gl_texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     for (auto& [key, value] : m_group_data) {
         auto& [texture, transforms] = value;
@@ -120,20 +110,7 @@ void TextureRenderer::flush() {
             GL_STATIC_DRAW
         );
 
-        GLint format = get_opengl_texture_format(texture);
-
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            format,
-            texture.get_width(),
-            texture.get_height(),
-            0,
-            format,
-            GL_UNSIGNED_BYTE,
-            texture.get_data()
-        );
-        glGenerateMipmap(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture.m_texture);
 
         glDrawElementsInstanced(
             GL_TRIANGLES,

@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 #include <window.hh>
-#include <types.hh>
+#include <texture.hh>
 #include <detail/detail.hh>
 
 namespace gfx::detail {
@@ -27,10 +27,10 @@ class TextureRenderer {
     };
 
     static constexpr std::array m_uvs {
-        glm::vec2(1.0, 0.0),
-        glm::vec2(0.0, 0.0),
-        glm::vec2(0.0, 1.0),
-        glm::vec2(1.0, 1.0),
+        glm::vec2(1.0, 0.0), // top-right
+        glm::vec2(0.0, 0.0), // top-left
+        glm::vec2(0.0, 1.0), // bottom-left
+        glm::vec2(1.0, 1.0), // bottom-right
     };
 
     static constexpr std::array m_indices {
@@ -58,15 +58,6 @@ public:
 
     void draw(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture);
     void flush();
-
-private:
-    [[nodiscard]] static constexpr GLint get_opengl_texture_format(const gfx::Texture& texture) {
-        switch (texture.get_channels()) {
-            case 3: return GL_RGB;
-            case 4: return GL_RGBA;
-        }
-        throw std::runtime_error("invalid channel count");
-    }
 
 };
 

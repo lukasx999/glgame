@@ -86,12 +86,13 @@ int main() {
             std::println("fps: {}", std::round(rd.get_fps()));
 
             // rd.draw_text(0, 0, 50, "hello, world!", font);
-            // rd.draw_text(0, 0, 50, "ABCDEF", font);
+            rd.draw_texture(0, 0, 500, 500, 0_deg, tex);
+            rd.draw_text(0, 0, 50, "ABCDEF", font);
 
             // draw_spiked_ball(rd, 0.001);
 
             // render_grid(rd, 300, 5, 0x595959ff);
-            render_grid_textured(rd, 700, 5, tex);
+            // render_grid_textured(rd, 700, 5, tex);
 
             handle_inputs(rd);
         });
