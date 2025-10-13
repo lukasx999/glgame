@@ -19,6 +19,7 @@
 // TODO: 2d camera
 // TODO: tui for statistics
 // TODO: limit fps eg: set_fps(std::optional<int> fps)
+// TODO: preserve drawing order of shapes (prematurely flush buffer, if a different shape is drawn)
 
 namespace gfx {
 
