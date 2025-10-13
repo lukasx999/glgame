@@ -41,15 +41,21 @@ class TextRenderer {
 
 public:
     TextRenderer(gfx::Window& window);
+
     ~TextRenderer();
-    void draw(int x, int y, int text_size, const char* text, const gfx::Font& font);
+    TextRenderer(const TextRenderer&) = delete;
+    TextRenderer(TextRenderer&&) = delete;
+    TextRenderer& operator=(const TextRenderer&) = delete;
+    TextRenderer& operator=(TextRenderer&&) = delete;
+
+    void draw(int x, int y, int text_size, const char* text, const gfx::Font& font, gfx::Color color);
 
     [[nodiscard]] gfx::Font load_font(const char* path) const {
         return { m_ft, path };
     }
 
 private:
-    void draw_char(int x, int y, const Glyph& glyph);
+    void draw_char(int x, int y, const Glyph& glyph, gfx::Color color);
 
 };
 

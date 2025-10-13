@@ -19,7 +19,6 @@
 // TODO: 2d camera
 // TODO: tui for statistics
 // TODO: limit fps eg: set_fps(std::optional<int> fps)
-// TODO: draw_text() via freetype
 
 namespace gfx {
 
@@ -81,8 +80,8 @@ public:
         m_line.draw(x0, y0, x1, y1, color);
     }
 
-    void draw_text(int x, int y, int text_size, const char* text, const gfx::Font& font) {
-        m_text.draw(x, y, text_size, text, font);
+    void draw_text(int x, int y, int text_size, const char* text, const gfx::Font& font, gfx::Color color) {
+        m_text.draw(x, y, text_size, text, font, color);
     }
 
     [[nodiscard]] gfx::Font load_font(const char* path) const {

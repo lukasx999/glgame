@@ -46,18 +46,18 @@ TextRenderer::~TextRenderer() {
     FT_Done_FreeType(m_ft);
 }
 
-void TextRenderer::draw(int x, int y, int text_size, const char* text, const gfx::Font& font) {
+void TextRenderer::draw(int x, int y, int text_size, const char* text, const gfx::Font& font, gfx::Color color) {
     int offset = 0;
 
     for (const char* c = text; *c; ++c) {
         auto glyph = font.load_glyph(*c, text_size);
-        draw_char(x+offset, y, glyph);
+        draw_char(x+offset, y, glyph, color);
         offset += glyph.advance;
     }
 
 }
 
-void TextRenderer::draw_char(int x, int y, const Glyph& glyph) {
+void TextRenderer::draw_char(int x, int y, const Glyph& glyph, gfx::Color color) {
 
     glUseProgram(m_program);
     glBindVertexArray(m_vertex_array);
@@ -66,7 +66,7 @@ void TextRenderer::draw_char(int x, int y, const Glyph& glyph) {
     int height = glyph.height;
 
     glm::mat4 model(1.0f);
-    model = glm::translate(model, glm::vec3(x+glyph.bearing_x, y, 0.0f));
+    model = glm::translate(model, glm::vec3(x+glyph.bearing_x, y-glyph.bearing_y, 0.0f));
     model = glm::scale(model, glm::vec3(width, height, 0.0f));
 
     glm::mat4 projection = glm::ortho(
@@ -79,6 +79,10 @@ void TextRenderer::draw_char(int x, int y, const Glyph& glyph) {
     glm::mat4 mvp = projection * model;
     GLint u_mvp = glGetUniformLocation(m_program, "u_mvp");
     glUniformMatrix4fv(u_mvp, 1, false, glm::value_ptr(mvp));
+
+    GLint u_color = glGetUniformLocation(m_program, "u_color");
+    auto c = color.normalized();
+    glUniform4f(u_color, c.r, c.g, c.b, c.a);
 
     glBindTexture(GL_TEXTURE_2D, glyph.texture);
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, nullptr);

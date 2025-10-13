@@ -60,12 +60,13 @@ private:
             throw std::runtime_error("failed to load char");
         }
 
-        unsigned int width = m_face->glyph->bitmap.width;
-        unsigned int height = m_face->glyph->bitmap.rows;
-        int bearing_x = m_face->glyph->bitmap_left;
-        int bearing_y = m_face->glyph->bitmap_top;
-        unsigned int advance = m_face->glyph->advance.x;
-        unsigned char* buffer = m_face->glyph->bitmap.buffer;
+        auto glyph = m_face->glyph;
+        unsigned int width = glyph->bitmap.width;
+        unsigned int height = glyph->bitmap.rows;
+        int bearing_x = glyph->bitmap_left;
+        int bearing_y = glyph->bitmap_top;
+        unsigned int advance = glyph->advance.x;
+        unsigned char* buffer = glyph->bitmap.buffer;
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
 
@@ -79,7 +80,7 @@ private:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, buffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, buffer);
 
         glBindTexture(GL_TEXTURE_2D, 0);
 
