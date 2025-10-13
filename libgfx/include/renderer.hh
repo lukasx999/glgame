@@ -20,7 +20,7 @@
 // TODO: tui for statistics
 // TODO: limit fps eg: set_fps(std::optional<int> fps)
 // TODO: preserve drawing order of shapes (prematurely flush buffer, if a different shape is drawn)
-// TODO: batching vs instancing
+// TODO: batching vs instancing (just batch everything for reusable code? - instancing only really works for rectangles)
 
 namespace gfx {
 
