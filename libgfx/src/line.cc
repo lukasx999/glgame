@@ -34,7 +34,6 @@ LineRenderer::LineRenderer(gfx::Window& window)
     GLint a_color = glGetAttribLocation(m_program, "a_color");
     glEnableVertexAttribArray(a_color);
     glVertexAttribPointer(a_color, 4, GL_FLOAT, false, sizeof(glm::vec4), nullptr);
-    glVertexAttribDivisor(a_color, 1);
 
     // just to make sure everything still works after unbinding, as other classes/functions may
     // modify opengl state after running the ctor
@@ -49,7 +48,9 @@ void LineRenderer::draw(int x0, int y0, int x1, int y1, gfx::Color color) {
     m_batch.push_back(Vertex({ x_to_ndc(m_window, x1), y_to_ndc(m_window, y1) }));
 
     auto c = color.normalized();
-    m_colors.push_back(glm::vec4(c.r, c.g, c.b, c.a));
+    glm::vec4 c_vec4(c.r, c.g, c.b, c.a);
+    m_colors.push_back(c_vec4);
+    m_colors.push_back(c_vec4);
 }
 
 void LineRenderer::flush() {
