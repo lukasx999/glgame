@@ -54,14 +54,14 @@ void LineRenderer::draw(int x0, int y0, int x1, int y1, gfx::Color color) {
 
 void LineRenderer::flush() {
 
+    glUseProgram(m_program);
+    glBindVertexArray(m_vertex_array);
+
     glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
     glBufferData(GL_ARRAY_BUFFER, m_batch.size() * sizeof(Vertex), m_batch.data(), GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_color_buffer);
     glBufferData(GL_ARRAY_BUFFER, m_colors.size() * sizeof(glm::vec4), m_colors.data(), GL_DYNAMIC_DRAW);
-
-    glUseProgram(m_program);
-    glBindVertexArray(m_vertex_array);
 
     glDrawArrays(GL_LINES, 0, m_batch.size());
     m_batch.clear();

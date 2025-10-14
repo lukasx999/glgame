@@ -108,11 +108,11 @@ void RectangleRenderer::draw(int x, int y, int width, int height, const gfx::IRo
 
 void RectangleRenderer::flush() {
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_instance_buffer);
-    glBufferData(GL_ARRAY_BUFFER, m_instance_data.size() * sizeof(InstanceData), m_instance_data.data(), GL_STATIC_DRAW);
-
     glUseProgram(m_program);
     glBindVertexArray(m_vertex_array);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_instance_buffer);
+    glBufferData(GL_ARRAY_BUFFER, m_instance_data.size() * sizeof(InstanceData), m_instance_data.data(), GL_STATIC_DRAW);
 
     glDrawElementsInstanced(
         GL_TRIANGLES,
