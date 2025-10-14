@@ -74,9 +74,9 @@ int main() {
     gfx::Window window(600, 600, "GLGame", false);
     gfx::Renderer rd(window);
 
-    gfx::Texture tex("./awesomeface.png");
+    // gfx::Texture tex("./awesomeface.png");
     // gfx::Font font = rd.load_font("/usr/share/fonts/TTF/Roboto-Regular.ttf");
-    gfx::Font font = rd.load_font("/usr/share/fonts/TTF/JetBrainsMono-Regular.ttf");
+    // gfx::Font font = rd.load_font("/usr/share/fonts/TTF/JetBrainsMono-Regular.ttf");
     // gfx::Font font = rd.load_font("/usr/share/fonts/Adwaita/AdwaitaSans-Regular.ttf");
 
     while (!window.should_close()) {
@@ -86,9 +86,11 @@ int main() {
             std::println("fps: {}", std::round(rd.get_fps()));
 
             // draw_spiked_ball(rd, 0.001);
+
             // rd.draw_rectangle(0, 0, 100, 100, 0_deg, gfx::Color::red());
             // rd.draw_rectangle(50, 50, 100, 100, 0_deg, gfx::Color::blue());
             // rd.draw_rectangle(100, 100, 100, 100, 0_deg, gfx::Color::green());
+
             // rd.draw_circle(200, 200, 100, gfx::Color::white());
 
             // rd.draw_line(0, 0, 100, 100, gfx::Color::green());

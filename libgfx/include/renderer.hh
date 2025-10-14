@@ -22,6 +22,33 @@
 // TODO: preserve drawing order of shapes (prematurely flush buffer, if a different shape is drawn)
 // TODO: batching vs instancing (just batch everything for reusable code? - instancing only really works for rectangles)
 
+/*
+
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, glm::vec3(x+width/2, y+height/2, 0.0f));
+    model = glm::rotate(model, rotation.get_radians(), glm::vec3(0.0f, 0.0f, 1.0f));
+    // subtract half of width & height, needed for centered rotation
+    model = glm::translate(model, glm::vec3(-width/2, -height/2, 0.0f));
+    model = glm::scale(model, glm::vec3(width, height, 0.0f));
+
+    // TODO: camera
+    // glm::vec3 camera_position(0.0f, 0.0f, 0.0f);
+    // glm::vec3 camera_direction(0.0f, 0.0f, -1.0f);
+    // glm::vec3 up(0.0f, 1.0f, 0.0f);
+    // glm::mat4 view = glm::lookAt(camera_position, camera_position+camera_direction, up);
+
+    glm::mat4 view(1.0f);
+
+    glm::mat4 projection = glm::ortho(
+        0.0f,
+        static_cast<float>(m_window.get_width()),
+        static_cast<float>(m_window.get_height()),
+        0.0f
+    );
+
+    glm::mat4 mvp = projection * view * model;
+*/
+
 namespace gfx {
 
 class Renderer {

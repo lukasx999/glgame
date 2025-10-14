@@ -15,27 +15,12 @@ class RectangleRenderer {
     GLuint m_program;
     GLuint m_vertex_array;
     GLuint m_vertex_buffer;
-    GLuint m_instance_buffer;
+    GLuint m_color_buffer;
     GLuint m_index_buffer;
 
-    struct InstanceData {
-        glm::mat4 mvp;
-        glm::vec4 color;
-    };
-
-    std::vector<InstanceData> m_instance_data;
-
-    static constexpr std::array m_vertices {
-        Vertex({ 1.0, 1.0 }), // top-right
-        Vertex({ 0.0, 1.0 }), // top-left
-        Vertex({ 0.0, 0.0 }), // bottom-left
-        Vertex({ 1.0, 0.0 }), // bottom-right
-    };
-
-    static constexpr std::array m_indices {
-        0u, 1u, 2u,
-        3u, 2u, 0u,
-    };
+    std::vector<glm::vec2> m_vertices;
+    std::vector<glm::vec4> m_colors;
+    std::vector<unsigned int> m_indices;
 
 public:
     explicit RectangleRenderer(gfx::Window& window);

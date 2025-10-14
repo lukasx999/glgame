@@ -17,6 +17,7 @@ inline void set_vertex_attrib_pointer(GLuint program, const char* name, GLint si
     glEnableVertexAttribArray(loc);
 }
 
+// TODO: remove this?
 struct Vertex {
     glm::vec2 m_position;
 };
