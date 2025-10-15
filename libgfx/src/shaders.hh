@@ -11,11 +11,6 @@ inline constexpr char default_[] = {
 '\0'
 };
 
-inline constexpr char rectangle[] = {
-#embed "../shaders/rectangle.vert" suffix(,)
-'\0'
-};
-
 inline constexpr char texture[] = {
 #embed "../shaders/texture.vert" suffix(,)
 '\0'
@@ -26,8 +21,8 @@ inline constexpr char text[] = {
 '\0'
 };
 
-inline constexpr char line[] = {
-#embed "../shaders/line.vert" suffix(,)
+inline constexpr char batched[] = {
+#embed "../shaders/batched.vert" suffix(,)
 '\0'
 };
 
@@ -45,8 +40,8 @@ inline constexpr char default_[] = {
 '\0'
 };
 
-inline constexpr char rectangle[] = {
-#embed "../shaders/rectangle.frag" suffix(,)
+inline constexpr char batched[] = {
+#embed "../shaders/batched.frag" suffix(,)
 '\0'
 };
 
@@ -57,11 +52,6 @@ inline constexpr char texture[] = {
 
 inline constexpr char circle[] = {
 #embed "../shaders/circle.frag" suffix(,)
-'\0'
-};
-
-inline constexpr char line[] = {
-#embed "../shaders/line.frag" suffix(,)
 '\0'
 };
 

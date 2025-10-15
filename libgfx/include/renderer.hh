@@ -90,6 +90,14 @@ public:
     }
 
     void draw_rectangle(int x, int y, int width, int height, const gfx::IRotation& rotation, gfx::Color color) {
+
+        // make sure all other shapes have already been drawn to the screen,
+        // as otherwise the drawing order will be incorrect, leading weird
+        // overlapping shapes
+        m_texture.flush();
+        m_line.flush();
+        m_triangle.flush();
+
         m_rectangle.draw(x, y, width, height, rotation, color);
     }
 
@@ -98,6 +106,12 @@ public:
     }
 
     void draw_circle(int x, int y, int radius, gfx::Color color) {
+
+        m_rectangle.flush();
+        m_texture.flush();
+        m_line.flush();
+        m_triangle.flush();
+
         m_circle.draw(x, y, radius, color);
     }
 

@@ -77,7 +77,7 @@ int main() {
     gfx::Texture tex("./awesomeface.png");
     // gfx::Font font = rd.load_font("/usr/share/fonts/TTF/Roboto-Regular.ttf");
     // gfx::Font font = rd.load_font("/usr/share/fonts/TTF/JetBrainsMono-Regular.ttf");
-    // gfx::Font font = rd.load_font("/usr/share/fonts/Adwaita/AdwaitaSans-Regular.ttf");
+    gfx::Font font = rd.load_font("/usr/share/fonts/Adwaita/AdwaitaSans-Regular.ttf");
 
     while (!window.should_close()) {
         rd.with_draw_context([&]() {
@@ -87,14 +87,15 @@ int main() {
 
             // draw_spiked_ball(rd, 0.001);
 
-            // rd.draw_triangle(0, 0, 100, 100, 0, 100, gfx::Color::red());
+            rd.draw_triangle(0, 0, 100, 100, 0, 100, gfx::Color::red());
             // rd.draw_triangle(100, 0, 100, 100, 0, 100, gfx::Color::blue());
 
             // rd.draw_rectangle(0, 0, 100, 100, 0_deg, gfx::Color::red());
             // rd.draw_rectangle(50, 50, 100, 100, 0_deg, gfx::Color::blue());
-            // rd.draw_rectangle(100, 100, 100, 100, 0_deg, gfx::Color::green());
+            rd.draw_rectangle(50, 50, 100, 100, 0_deg, gfx::Color::green());
 
-            // rd.draw_circle(200, 200, 100, gfx::Color::white());
+
+            rd.draw_circle(200, 200, 100, gfx::Color::white());
 
             // rd.draw_line(0, 0, 100, 100, gfx::Color::green());
             // rd.draw_line(0, 0, 200, 100, gfx::Color::red());
@@ -106,9 +107,8 @@ int main() {
             // rd.draw_rectangle(0, 0, 50, 50, 0_deg, gfx::Color::red());
 
             // render_grid_triangles(rd, 50, 15, gfx::Color::blue());
-            // rd.draw_text(0, 0, 50, "ABCDEF", font);
             // render_grid(rd, 500, 5, 0x595959ff);
-            render_grid_textured(rd, 50, 100, tex);
+            // render_grid_textured(rd, 700, 5, tex);
 
             handle_inputs(rd);
         });

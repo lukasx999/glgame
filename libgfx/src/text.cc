@@ -57,6 +57,7 @@ void TextRenderer::draw(int x, int y, int text_size, const char* text, const gfx
 
 }
 
+// TODO: render text under x,y instead of above?
 void TextRenderer::draw_char(int x, int y, const Glyph& glyph, gfx::Color color) {
 
     glUseProgram(m_program);

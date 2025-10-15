@@ -15,7 +15,7 @@ LineRenderer::LineRenderer(gfx::Window& window)
 : m_window(window)
 {
 
-    m_program = create_shader_program(shaders::vertex::line, shaders::fragment::line);
+    m_program = create_shader_program(shaders::vertex::batched, shaders::fragment::batched);
 
     glGenVertexArrays(1, &m_vertex_array);
     glBindVertexArray(m_vertex_array);
