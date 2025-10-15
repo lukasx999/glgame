@@ -11,6 +11,11 @@
 
 namespace gfx::detail {
 
+struct IBatchRenderer {
+    virtual void flush() = 0;
+    virtual ~IBatchRenderer() { }
+};
+
 inline void set_vertex_attrib_pointer(GLuint program, const char* name, GLint size, GLenum type, GLsizei stride, size_t offset) {
     GLint loc = glGetAttribLocation(program, name);
     glVertexAttribPointer(loc, size, type, false, stride, reinterpret_cast<void*>(offset));

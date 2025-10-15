@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -61,6 +63,13 @@ class Renderer {
     detail::LineRenderer m_line;
     detail::TextRenderer m_text;
 
+    std::array<std::reference_wrapper<detail::IBatchRenderer>, 4> m_batch_renderers {
+        m_rectangle,
+        m_triangle,
+        m_texture,
+        m_line
+    };
+
     double m_frame_time = 0.0;
     double m_last_frame = 0.0;
 
@@ -90,61 +99,32 @@ public:
     }
 
     void draw_rectangle(int x, int y, int width, int height, const gfx::IRotation& rotation, gfx::Color color) {
-
-        // make sure all other shapes have already been drawn to the screen,
-        // as otherwise the drawing order will be incorrect, leading weird
-        // overlapping shapes
-        m_texture.flush();
-        m_line.flush();
-        m_triangle.flush();
-
+        flush_all_but(m_rectangle);
         m_rectangle.draw(x, y, width, height, rotation, color);
     }
 
     void draw_texture(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture) {
-
-        m_rectangle.flush();
-        m_line.flush();
-        m_triangle.flush();
-
+        flush_all_but(m_texture);
         m_texture.draw(x, y, width, height, rotation, texture);
     }
 
     void draw_circle(int x, int y, int radius, gfx::Color color) {
-
-        m_rectangle.flush();
-        m_texture.flush();
-        m_line.flush();
-        m_triangle.flush();
-
+        flush();
         m_circle.draw(x, y, radius, color);
     }
 
     void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color) {
-
-        m_rectangle.flush();
-        m_texture.flush();
-        m_line.flush();
-
+        flush_all_but(m_triangle);
         m_triangle.draw(x0, y0, x1, y1, x2, y2, color);
     }
 
     void draw_line(int x0, int y0, int x1, int y1, gfx::Color color) {
-
-        m_rectangle.flush();
-        m_texture.flush();
-        m_triangle.flush();
-
+        flush_all_but(m_line);
         m_line.draw(x0, y0, x1, y1, color);
     }
 
     void draw_text(int x, int y, int text_size, const char* text, const gfx::Font& font, gfx::Color color) {
-
-        m_rectangle.flush();
-        m_texture.flush();
-        m_line.flush();
-        m_triangle.flush();
-
+        flush();
         m_text.draw(x, y, text_size, text, font, color);
     }
 
@@ -160,10 +140,22 @@ public:
 
 private:
     void flush() {
-        m_rectangle.flush();
-        m_texture.flush();
-        m_line.flush();
-        m_triangle.flush();
+        for (auto& rd : m_batch_renderers) {
+            rd.get().flush();
+        }
+    }
+
+    // make sure all other shapes have already been drawn to the screen,
+    // as otherwise the drawing order will be incorrect, leading weird
+    // overlapping shapes
+    //
+    // therefore we have to flush all other shapes before drawing the current one
+    void flush_all_but(const detail::IBatchRenderer& exception) {
+        for (auto& rd : m_batch_renderers) {
+            if (reinterpret_cast<detail::IBatchRenderer*>(&rd) == &exception)
+                continue;
+            rd.get().flush();
+        }
     }
 
     void calculate_frame_time() {

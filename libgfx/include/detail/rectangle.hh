@@ -9,7 +9,7 @@
 
 namespace gfx::detail {
 
-class RectangleRenderer {
+class RectangleRenderer : public IBatchRenderer {
     gfx::Window& m_window;
 
     GLuint m_program;
@@ -25,7 +25,7 @@ class RectangleRenderer {
 public:
     explicit RectangleRenderer(gfx::Window& window);
     void draw(int x, int y, int width, int height, const gfx::IRotation& rotation, gfx::Color color);
-    void flush();
+    void flush() override;
 
 };
 

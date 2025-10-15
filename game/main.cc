@@ -97,9 +97,9 @@ int main() {
 
             rd.draw_circle(200, 200, 100, gfx::Color::white());
 
-            // rd.draw_line(0, 0, 100, 100, gfx::Color::green());
-            // rd.draw_line(0, 0, 200, 100, gfx::Color::red());
-            // rd.draw_line(0, 0, 300, 100, gfx::Color::blue());
+            rd.draw_line(0, 0, 100, 100, gfx::Color::green());
+            rd.draw_line(0, 0, 200, 100, gfx::Color::red());
+            rd.draw_line(0, 0, 300, 100, gfx::Color::blue());
 
             // rd.draw_texture(0, 0, 500, 500, 0_deg, tex);
             rd.draw_text(200, 200, 50, "hellog, world!", font, gfx::Color::red());

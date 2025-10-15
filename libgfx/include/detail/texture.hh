@@ -9,7 +9,7 @@
 
 namespace gfx::detail {
 
-class TextureRenderer {
+class TextureRenderer : public IBatchRenderer {
     gfx::Window& m_window;
 
     GLuint m_program;
@@ -39,7 +39,7 @@ public:
     explicit TextureRenderer(gfx::Window& window);
 
     void draw(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture);
-    void flush();
+    void flush() override;
 
 };
 

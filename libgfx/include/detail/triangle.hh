@@ -8,7 +8,7 @@
 
 namespace gfx::detail {
 
-class TriangleRenderer {
+class TriangleRenderer : public IBatchRenderer {
     gfx::Window& m_window;
 
     GLuint m_program;
@@ -22,7 +22,7 @@ class TriangleRenderer {
 public:
     explicit TriangleRenderer(gfx::Window& window);
     void draw(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color);
-    void flush();
+    void flush() override;
 
 };
 
