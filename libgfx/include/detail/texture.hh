@@ -9,7 +9,6 @@
 
 namespace gfx::detail {
 
-// TODO: change to batch rendering
 class TextureRenderer {
     gfx::Window& m_window;
 
