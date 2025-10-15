@@ -14,10 +14,15 @@ class TriangleRenderer {
     GLuint m_program;
     GLuint m_vertex_array;
     GLuint m_vertex_buffer;
+    GLuint m_color_buffer;
+
+    std::vector<glm::vec2> m_vertices;
+    std::vector<glm::vec4> m_colors;
 
 public:
     explicit TriangleRenderer(gfx::Window& window);
     void draw(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color);
+    void flush();
 
 };
 

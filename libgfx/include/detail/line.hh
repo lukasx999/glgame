@@ -16,10 +16,8 @@ class LineRenderer {
     GLuint m_color_buffer;
     GLuint m_vertex_buffer;
 
-    // colors are stored in an instanced array
     std::vector<glm::vec4> m_colors;
-    // accumulator used for batch rendering
-    std::vector<Vertex> m_batch;
+    std::vector<glm::vec2> m_vertices;
 
 public:
     explicit LineRenderer(gfx::Window& window);
