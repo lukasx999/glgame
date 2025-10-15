@@ -33,12 +33,12 @@ struct Glyph {
 };
 
 [[nodiscard]] inline constexpr
-float x_to_ndc(gfx::Window& window, float x) {
+float x_to_ndc(const gfx::Window& window, float x) {
     return x / window.get_width() * 2.0f - 1.0f;
 }
 
 [[nodiscard]] inline constexpr
-float y_to_ndc(gfx::Window& window, float y) {
+float y_to_ndc(const gfx::Window& window, float y) {
     return -(y / window.get_height() * 2.0f - 1.0f);
 }
 

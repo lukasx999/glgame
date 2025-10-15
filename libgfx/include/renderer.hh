@@ -24,31 +24,14 @@
 // TODO: rotation for textures/rectangles
 // TODO: circle using GL_POINTS
 
+// TODO: delete:
 /*
-
     glm::mat4 model(1.0f);
     model = glm::translate(model, glm::vec3(x+width/2, y+height/2, 0.0f));
     model = glm::rotate(model, rotation.get_radians(), glm::vec3(0.0f, 0.0f, 1.0f));
     // subtract half of width & height, needed for centered rotation
     model = glm::translate(model, glm::vec3(-width/2, -height/2, 0.0f));
     model = glm::scale(model, glm::vec3(width, height, 0.0f));
-
-    // TODO: camera
-    // glm::vec3 camera_position(0.0f, 0.0f, 0.0f);
-    // glm::vec3 camera_direction(0.0f, 0.0f, -1.0f);
-    // glm::vec3 up(0.0f, 1.0f, 0.0f);
-    // glm::mat4 view = glm::lookAt(camera_position, camera_position+camera_direction, up);
-
-    glm::mat4 view(1.0f);
-
-    glm::mat4 projection = glm::ortho(
-        0.0f,
-        static_cast<float>(m_window.get_width()),
-        static_cast<float>(m_window.get_height()),
-        0.0f
-    );
-
-    glm::mat4 mvp = projection * view * model;
 */
 
 namespace gfx {
@@ -72,6 +55,10 @@ class Renderer {
 
     double m_frame_time = 0.0;
     double m_last_frame = 0.0;
+
+    glm::mat4 m_view_default = gen_view_matrix(m_window, m_window.get_width()/2, m_window.get_height()/2);
+    glm::mat4 m_view_camera = m_view_default;
+    glm::mat4 m_view_active = m_view_default;
 
 public:
     explicit Renderer(Window& window)
@@ -98,13 +85,24 @@ public:
         return 1.0 / m_frame_time;
     }
 
+    void with_camera(std::function<void()> draw_fn) {
+        m_view_active = m_view_camera;
+        draw_fn();
+        m_view_active = m_view_default;
+    }
+
+    // TODO: rotation
+    void set_camera(int center_x, int center_y) {
+        m_view_camera = gen_view_matrix(m_window, center_x, center_y);
+    }
+
     void draw_rectangle(int x, int y, int width, int height, const gfx::IRotation& rotation, gfx::Color color) {
-        flush_all_but(m_rectangle);
-        m_rectangle.draw(x, y, width, height, rotation, color);
+        flush_all_except(m_rectangle);
+        m_rectangle.draw(x, y, width, height, rotation, color, m_view_active);
     }
 
     void draw_texture(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture) {
-        flush_all_but(m_texture);
+        flush_all_except(m_texture);
         m_texture.draw(x, y, width, height, rotation, texture);
     }
 
@@ -114,13 +112,13 @@ public:
     }
 
     void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color) {
-        flush_all_but(m_triangle);
-        m_triangle.draw(x0, y0, x1, y1, x2, y2, color);
+        flush_all_except(m_triangle);
+        m_triangle.draw(x0, y0, x1, y1, x2, y2, color, m_view_active);
     }
 
     void draw_line(int x0, int y0, int x1, int y1, gfx::Color color) {
-        flush_all_but(m_line);
-        m_line.draw(x0, y0, x1, y1, color);
+        flush_all_except(m_line);
+        m_line.draw(x0, y0, x1, y1, color, m_view_active);
     }
 
     void draw_text(int x, int y, int text_size, const char* text, const gfx::Font& font, gfx::Color color) {
@@ -150,7 +148,7 @@ private:
     // overlapping shapes
     //
     // therefore we have to flush all other shapes before drawing the current one
-    void flush_all_but(const detail::IBatchRenderer& exception) {
+    void flush_all_except(const detail::IBatchRenderer& exception) {
         for (auto& rd : m_batch_renderers) {
             if (reinterpret_cast<detail::IBatchRenderer*>(&rd) == &exception)
                 continue;
@@ -162,6 +160,20 @@ private:
         double time = glfwGetTime();
         m_frame_time = time - m_last_frame;
         m_last_frame = time;
+    }
+
+    [[nodiscard]]
+    constexpr static glm::mat4 gen_view_matrix(const Window& window, int center_x, int center_y) {
+        // TODO: fix camera
+        glm::vec3 camera_position(
+            center_x,
+            center_y,
+            0.0f
+        );
+        glm::vec3 camera_direction(0.0f, 0.0f, -1.0f);
+        glm::vec3 up(0.0f, 1.0f, 0.0f);
+        glm::mat4 view = glm::lookAt(camera_position, camera_position+camera_direction, up);
+        return view;
     }
 
 };

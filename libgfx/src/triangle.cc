@@ -36,15 +36,40 @@ TriangleRenderer::TriangleRenderer(gfx::Window& window)
     glEnableVertexAttribArray(a_color);
 
 
+    glGenBuffers(1, &m_transform_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_transform_buffer);
+
+    GLint a_mvp = glGetAttribLocation(m_program, "a_mvp");
+    for (int i = 0; i < 4; ++i) {
+        glVertexAttribPointer(a_mvp+i, 4, GL_FLOAT, false, sizeof(glm::vec4)*4, reinterpret_cast<void*>(i * sizeof(glm::vec4)));
+        glEnableVertexAttribArray(a_mvp+i);
+    }
+
+
     glBindVertexArray(0);
     glUseProgram(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void TriangleRenderer::draw(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color) {
-    m_vertices.push_back({ x_to_ndc(m_window, x0), y_to_ndc(m_window, y0) });
-    m_vertices.push_back({ x_to_ndc(m_window, x1), y_to_ndc(m_window, y1) });
-    m_vertices.push_back({ x_to_ndc(m_window, x2), y_to_ndc(m_window, y2) });
+void TriangleRenderer::draw(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color, glm::mat4 view) {
+    m_vertices.push_back({ x0, y0 });
+    m_vertices.push_back({ x1, y1 });
+    m_vertices.push_back({ x2, y2 });
+
+    glm::mat4 model(1.0);
+
+    glm::mat4 projection = glm::ortho(
+        0.0f,
+        static_cast<float>(m_window.get_width()),
+        static_cast<float>(m_window.get_height()),
+        0.0f
+    );
+
+    glm::mat4 mvp = projection * view * model;
+
+    m_transforms.push_back(mvp);
+    m_transforms.push_back(mvp);
+    m_transforms.push_back(mvp);
 
     auto c = color.normalized();
     glm::vec4 cv(c.r, c.g, c.b, c.a);
@@ -59,15 +84,19 @@ void TriangleRenderer::flush() {
     glUseProgram(m_program);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() *  sizeof(glm::vec2), m_vertices.data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(glm::vec2), m_vertices.data(), GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_color_buffer);
-    glBufferData(GL_ARRAY_BUFFER, m_colors.size() *  sizeof(glm::vec4), m_colors.data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, m_colors.size() * sizeof(glm::vec4), m_colors.data(), GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_transform_buffer);
+    glBufferData(GL_ARRAY_BUFFER, m_transforms.size() * sizeof(glm::mat4), m_transforms.data(), GL_DYNAMIC_DRAW);
 
     glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
     m_colors.clear();
     m_vertices.clear();
+    m_transforms.clear();
 }
 
 } // namespace gfx::detail
