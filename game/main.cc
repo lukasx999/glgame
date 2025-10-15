@@ -74,7 +74,7 @@ int main() {
     gfx::Window window(600, 600, "GLGame", false);
     gfx::Renderer rd(window);
 
-    // gfx::Texture tex("./awesomeface.png");
+    gfx::Texture tex("./awesomeface.png");
     // gfx::Font font = rd.load_font("/usr/share/fonts/TTF/Roboto-Regular.ttf");
     // gfx::Font font = rd.load_font("/usr/share/fonts/TTF/JetBrainsMono-Regular.ttf");
     // gfx::Font font = rd.load_font("/usr/share/fonts/Adwaita/AdwaitaSans-Regular.ttf");
@@ -87,8 +87,8 @@ int main() {
 
             // draw_spiked_ball(rd, 0.001);
 
-            rd.draw_triangle(0, 0, 100, 100, 0, 100, gfx::Color::red());
-            rd.draw_triangle(100, 0, 100, 100, 0, 100, gfx::Color::blue());
+            // rd.draw_triangle(0, 0, 100, 100, 0, 100, gfx::Color::red());
+            // rd.draw_triangle(100, 0, 100, 100, 0, 100, gfx::Color::blue());
 
             // rd.draw_rectangle(0, 0, 100, 100, 0_deg, gfx::Color::red());
             // rd.draw_rectangle(50, 50, 100, 100, 0_deg, gfx::Color::blue());
@@ -108,7 +108,7 @@ int main() {
             // render_grid_triangles(rd, 50, 15, gfx::Color::blue());
             // rd.draw_text(0, 0, 50, "ABCDEF", font);
             // render_grid(rd, 500, 5, 0x595959ff);
-            // render_grid_textured(rd, 700, 5, tex);
+            render_grid_textured(rd, 50, 100, tex);
 
             handle_inputs(rd);
         });
