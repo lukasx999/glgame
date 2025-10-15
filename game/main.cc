@@ -102,7 +102,7 @@ int main() {
             // rd.draw_line(0, 0, 300, 100, gfx::Color::blue());
 
             // rd.draw_texture(0, 0, 500, 500, 0_deg, tex);
-            // rd.draw_text(200, 200, 50, "hellog, world!", font, gfx::Color::white());
+            rd.draw_text(200, 200, 50, "hellog, world!", font, gfx::Color::red());
 
             // rd.draw_rectangle(0, 0, 50, 50, 0_deg, gfx::Color::red());
 

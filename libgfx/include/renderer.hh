@@ -19,8 +19,8 @@
 // TODO: 2d camera
 // TODO: tui for statistics
 // TODO: limit fps eg: set_fps(std::optional<int> fps)
-// TODO: preserve drawing order of shapes (prematurely flush buffer, if a different shape is drawn)
-// TODO: batching vs instancing (just batch everything for reusable code? - instancing only really works for rectangles)
+// TODO: rotation for textures/rectangles
+// TODO: circle using GL_POINTS
 
 /*
 
@@ -102,6 +102,11 @@ public:
     }
 
     void draw_texture(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture) {
+
+        m_rectangle.flush();
+        m_line.flush();
+        m_triangle.flush();
+
         m_texture.draw(x, y, width, height, rotation, texture);
     }
 
@@ -116,14 +121,30 @@ public:
     }
 
     void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color) {
+
+        m_rectangle.flush();
+        m_texture.flush();
+        m_line.flush();
+
         m_triangle.draw(x0, y0, x1, y1, x2, y2, color);
     }
 
     void draw_line(int x0, int y0, int x1, int y1, gfx::Color color) {
+
+        m_rectangle.flush();
+        m_texture.flush();
+        m_triangle.flush();
+
         m_line.draw(x0, y0, x1, y1, color);
     }
 
     void draw_text(int x, int y, int text_size, const char* text, const gfx::Font& font, gfx::Color color) {
+
+        m_rectangle.flush();
+        m_texture.flush();
+        m_line.flush();
+        m_triangle.flush();
+
         m_text.draw(x, y, text_size, text, font, color);
     }
 
