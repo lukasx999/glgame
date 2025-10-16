@@ -2,8 +2,6 @@
 
 #include <array>
 
-#include <glad/gl.h>
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
@@ -27,16 +25,6 @@
 // TODO: circle using GL_POINTS
 // TODO: fix glfw resizing window
 // TODO: overloads for draw functions with gfx::Vec
-
-// TODO: delete:
-/*
-    glm::mat4 model(1.0f);
-    model = glm::translate(model, glm::vec3(x+width/2, y+height/2, 0.0f));
-    model = glm::rotate(model, rotation.get_radians(), glm::vec3(0.0f, 0.0f, 1.0f));
-    // subtract half of width & height, needed for centered rotation
-    model = glm::translate(model, glm::vec3(-width/2, -height/2, 0.0f));
-    model = glm::scale(model, glm::vec3(width, height, 0.0f));
-*/
 
 namespace gfx {
 
@@ -100,12 +88,26 @@ public:
         m_view_camera = gen_view_matrix(m_window, center_x, center_y);
     }
 
-    void draw_rectangle(int x, int y, int width, int height, const gfx::IRotation& rotation, gfx::Color color) {
+    void draw_rectangle(
+        int x,
+        int y,
+        int width,
+        int height,
+        const gfx::IRotation& rotation,
+        gfx::Color color
+    ) {
         flush_all_except(m_rectangle);
         m_rectangle.draw(x, y, width, height, rotation, color, m_view_active);
     }
 
-    void draw_texture(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture) {
+    void draw_texture(
+        int x,
+        int y,
+        int width,
+        int height,
+        const gfx::IRotation& rotation,
+        const gfx::Texture& texture
+    ) {
         flush_all_except(m_texture);
         m_texture.draw(x, y, width, height, rotation, texture, m_view_active);
     }

@@ -5,18 +5,6 @@
 
 namespace gfx {
 
-bool KeyState::pressed() const {
-    return m_glfw_state == GLFW_PRESS;
-}
-
-bool KeyState::released() const {
-    return m_glfw_state == GLFW_RELEASE;
-}
-
-bool KeyState::repeated() const {
-    return m_glfw_state == GLFW_REPEAT;
-}
-
 Texture::Texture(const char* path) {
     m_data = stbi_load(path, &m_width, &m_height, &m_channels, 0);
     if (m_data == nullptr) {

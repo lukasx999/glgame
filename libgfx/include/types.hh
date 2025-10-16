@@ -3,6 +3,8 @@
 #include <cmath>
 #include <cstdint>
 
+#include <GLFW/glfw3.h>
+
 namespace gfx {
 
 [[nodiscard]] inline constexpr float deg_to_rad(float deg) {
@@ -115,9 +117,17 @@ class KeyState {
     explicit KeyState(int glfw_state) : m_glfw_state(glfw_state) { }
 
 public:
-    [[nodiscard]] bool pressed() const;
-    [[nodiscard]] bool released() const;
-    [[nodiscard]] bool repeated() const;
+    [[nodiscard]] bool pressed() const {
+        return m_glfw_state == GLFW_PRESS;
+    }
+
+    [[nodiscard]] bool released() const {
+        return m_glfw_state == GLFW_RELEASE;
+    }
+
+    [[nodiscard]] bool repeated() const {
+        return m_glfw_state == GLFW_REPEAT;
+}
 
 };
 
