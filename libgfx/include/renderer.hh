@@ -25,6 +25,7 @@
 // TODO: rotation for textures/rectangles
 // TODO: circle using GL_POINTS
 // TODO: proper batch rendering for textures
+// TODO: fix glfw resizing window
 
 // TODO: delete:
 /*
