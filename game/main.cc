@@ -83,9 +83,11 @@ int main() {
         rd.with_draw_context([&]() {
 
             rd.clear_background(Color::black());
+            std::println("width: {}", window.get_width());
+            std::println("height: {}", window.get_height());
             std::println("fps: {}", std::round(rd.get_fps()));
 
-            rd.set_camera(0, 0);
+            // rd.set_camera(250, 300);
 
             // draw_spiked_ball(rd, 0.001);
 

@@ -20,6 +20,7 @@
 // TODO: auto-invoke python script for generating shader glue code
 // TODO: 2d camera
 // TODO: tui for statistics
+// TODO: show average fps
 // TODO: limit fps eg: set_fps(std::optional<int> fps)
 // TODO: rotation for textures/rectangles
 // TODO: circle using GL_POINTS
@@ -162,12 +163,11 @@ private:
         m_last_frame = time;
     }
 
-    [[nodiscard]]
-    constexpr static glm::mat4 gen_view_matrix(const Window& window, int center_x, int center_y) {
-        // TODO: fix camera
+    [[nodiscard]] static constexpr
+    glm::mat4 gen_view_matrix(const Window& window, int center_x, int center_y) {
         glm::vec3 camera_position(
-            center_x,
-            center_y,
+            center_x - window.get_width() / 2.0f,
+            center_y - window.get_height() / 2.0f,
             0.0f
         );
         glm::vec3 camera_direction(0.0f, 0.0f, -1.0f);
