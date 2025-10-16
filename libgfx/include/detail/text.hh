@@ -13,9 +13,8 @@ class TextRenderer;
 } // namespace detail
 
 class Font {
-    FT_Face m_face;
-
     friend detail::TextRenderer;
+    FT_Face m_face;
 
     Font(FT_Library ft, const char* path) {
         if (FT_New_Face(ft, path, 0, &m_face) != 0) {

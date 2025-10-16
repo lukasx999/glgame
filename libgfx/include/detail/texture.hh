@@ -13,13 +13,13 @@ class TextureRenderer;
 } // namespace detail
 
 class Texture {
+    friend detail::TextureRenderer;
+
     GLuint m_texture;
     int m_width;
     int m_height;
     int m_channels;
     unsigned char* m_data;
-
-    friend detail::TextureRenderer;
 
 public:
     Texture(const char* path);
@@ -88,7 +88,15 @@ class TextureRenderer : public IBatchRenderer {
 public:
     explicit TextureRenderer(gfx::Window& window);
 
-    void draw(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture, glm::mat4 view);
+    void draw(
+        int x,
+        int y,
+        int width,
+        int height,
+        const gfx::IRotation& rotation,
+        const gfx::Texture& texture,
+        glm::mat4 view
+    );
     void flush() override;
 
 };

@@ -26,7 +26,15 @@ class RectangleRenderer : public IBatchRenderer {
 
 public:
     explicit RectangleRenderer(gfx::Window& window);
-    void draw(int x, int y, int width, int height, const gfx::IRotation& rotation, gfx::Color color, glm::mat4 view);
+    void draw(
+        int x,
+        int y,
+        int width,
+        int height,
+        const gfx::IRotation& rotation,
+        gfx::Color color,
+        glm::mat4 view
+    );
     void flush() override;
 
 };

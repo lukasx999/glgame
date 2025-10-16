@@ -49,7 +49,15 @@ RectangleRenderer::RectangleRenderer(gfx::Window& window)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void RectangleRenderer::draw(int x, int y, int width, int height, const gfx::IRotation& rotation, gfx::Color color, glm::mat4 view) {
+void RectangleRenderer::draw(
+    int x,
+    int y,
+    int width,
+    int height,
+    const gfx::IRotation& rotation,
+    gfx::Color color,
+    glm::mat4 view
+) {
 
     int vertex_count =  m_vertices.size();
     m_indices.push_back(0u + vertex_count); // top-left

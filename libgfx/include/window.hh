@@ -48,15 +48,7 @@ public:
     }
 
     [[nodiscard]] KeyState get_key_state(Key key) const {
-        int state = glfwGetKey(m_window, gfx_key_to_glfw_key(key));
-
-        switch (state) {
-            case GLFW_RELEASE: return KeyState::Release;
-            case GLFW_PRESS:   return KeyState::Press;
-            case GLFW_REPEAT:  return KeyState::Repeat;
-        }
-
-        throw std::runtime_error("unknown glfw key state");
+        return KeyState(glfwGetKey(m_window, gfx_key_to_glfw_key(key)));
     }
 
 private:

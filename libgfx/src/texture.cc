@@ -46,7 +46,15 @@ TextureRenderer::TextureRenderer(gfx::Window& window)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void TextureRenderer::draw(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture, glm::mat4 view) {
+void TextureRenderer::draw(
+    int x,
+    int y,
+    int width,
+    int height,
+    const gfx::IRotation& rotation,
+    const gfx::Texture& texture,
+    glm::mat4 view
+) {
 
     glm::mat4 model(1.0);
 
@@ -58,7 +66,6 @@ void TextureRenderer::draw(int x, int y, int width, int height, const gfx::IRota
     );
 
     glm::mat4 mvp = projection * view * model;
-
 
     if (m_group_data.contains(texture.m_data)) {
         RenderGroup& g = m_group_data.at(texture.m_data);

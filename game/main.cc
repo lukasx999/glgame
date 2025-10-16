@@ -11,7 +11,7 @@ using gfx::KeyState;
 namespace {
 
 void handle_inputs(gfx::Renderer& rd) {
-    if (rd.get_window().get_key_state(gfx::Key::Escape) == KeyState::Press) {
+    if (rd.get_window().get_key_state(gfx::Key::Escape).pressed()) {
         glfwTerminate();
         exit(EXIT_SUCCESS);
     }
@@ -90,13 +90,13 @@ int main() {
             std::println("fps: {}", std::round(rd.get_fps()));
 
             int step = 5;
-            if (window.get_key_state(gfx::Key::W) == gfx::KeyState::Press) {
+            if (window.get_key_state(gfx::Key::W).pressed()) {
                 camera.y -= step;
-            } else if (window.get_key_state(gfx::Key::S) == gfx::KeyState::Press) {
+            } else if (window.get_key_state(gfx::Key::S).pressed()) {
                 camera.y += step;
-            } else if (window.get_key_state(gfx::Key::D) == gfx::KeyState::Press) {
+            } else if (window.get_key_state(gfx::Key::D).pressed()) {
                 camera.x += step;
-            } else if (window.get_key_state(gfx::Key::A) == gfx::KeyState::Press) {
+            } else if (window.get_key_state(gfx::Key::A).pressed()) {
                 camera.x -= step;
             }
 

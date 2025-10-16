@@ -109,10 +109,16 @@ struct Color {
 
 };
 
-enum class KeyState {
-    Release,
-    Press,
-    Repeat,
+class KeyState {
+    friend class Window;
+    int m_glfw_state;
+    explicit KeyState(int glfw_state) : m_glfw_state(glfw_state) { }
+
+public:
+    [[nodiscard]] bool pressed() const;
+    [[nodiscard]] bool released() const;
+    [[nodiscard]] bool repeated() const;
+
 };
 
 enum class Key {
