@@ -29,6 +29,10 @@ GLFWwindow* gfx::Window::init_glfw(int width, int height, const char* window_tit
 
     glDebugMessageCallback(debug_message_callback, nullptr);
 
+    glfwSetWindowSizeCallback(window, []([[maybe_unused]] GLFWwindow* window, int width, int height) {
+        glViewport(0, 0, width, height);
+    });
+
     return window;
 }
 

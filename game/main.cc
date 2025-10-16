@@ -79,6 +79,8 @@ int main() {
     // gfx::Font font = rd.load_font("/usr/share/fonts/TTF/JetBrainsMono-Regular.ttf");
     gfx::Font font = rd.load_font("/usr/share/fonts/Adwaita/AdwaitaSans-Regular.ttf");
 
+    gfx::Vec camera(window.get_width()/2.0f, window.get_height()/2.0f);
+
     while (!window.should_close()) {
         rd.with_draw_context([&]() {
 
@@ -87,7 +89,18 @@ int main() {
             std::println("height: {}", window.get_height());
             std::println("fps: {}", std::round(rd.get_fps()));
 
-            // rd.set_camera(250, 300);
+            int step = 5;
+            if (window.get_key_state(gfx::Key::W) == gfx::KeyState::Press) {
+                camera.y -= step;
+            } else if (window.get_key_state(gfx::Key::S) == gfx::KeyState::Press) {
+                camera.y += step;
+            } else if (window.get_key_state(gfx::Key::D) == gfx::KeyState::Press) {
+                camera.x += step;
+            } else if (window.get_key_state(gfx::Key::A) == gfx::KeyState::Press) {
+                camera.x -= step;
+            }
+
+            rd.set_camera(camera.x, camera.y);
 
             // draw_spiked_ball(rd, 0.001);
 
@@ -97,13 +110,13 @@ int main() {
                 rd.draw_rectangle(50, 50, 100, 100, 0_deg, gfx::Color::blue());
                 rd.draw_rectangle(100, 100, 100, 100, 0_deg, gfx::Color::green());
 
-                // rd.draw_triangle(0, 0, 100, 100, 0, 100, gfx::Color::red());
-                // rd.draw_triangle(100, 0, 100, 100, 0, 100, gfx::Color::blue());
+                rd.draw_triangle(0, 0, 100, 100, 0, 100, gfx::Color::red());
+                rd.draw_triangle(100, 0, 100, 100, 0, 100, gfx::Color::blue());
             });
 
-            // rd.draw_line(0, 0, 100, 100, gfx::Color::green());
-            // rd.draw_line(0, 0, 200, 100, gfx::Color::red());
-            // rd.draw_line(0, 0, 300, 100, gfx::Color::blue());
+            rd.draw_line(0, 0, 100, 100, gfx::Color::green());
+            rd.draw_line(0, 0, 200, 100, gfx::Color::red());
+            rd.draw_line(0, 0, 300, 100, gfx::Color::blue());
 
 
             // rd.draw_circle(200, 200, 100, gfx::Color::white());

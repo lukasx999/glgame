@@ -26,7 +26,7 @@ class TextureRenderer : public IBatchRenderer {
     };
 
     // the texture sampler is a uniform, so we create groups of transforms per texture
-    // and instance-render each group, resulting in one draw call per texture
+    // and batch-render each group, resulting in one draw call per texture
     //
     // for identifying each group, we just hash the raw pointer to the heap-allocated
     // memory of the texture

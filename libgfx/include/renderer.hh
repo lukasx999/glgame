@@ -24,6 +24,7 @@
 // TODO: limit fps eg: set_fps(std::optional<int> fps)
 // TODO: rotation for textures/rectangles
 // TODO: circle using GL_POINTS
+// TODO: proper batch rendering for textures
 
 // TODO: delete:
 /*
