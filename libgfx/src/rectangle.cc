@@ -41,7 +41,6 @@ RectangleRenderer::RectangleRenderer(gfx::Window& window)
         glEnableVertexAttribArray(a_mvp+i);
     }
 
-
     // just to make sure everything still works after unbinding, as other classes/functions may
     // modify opengl state after running the ctor
     glBindVertexArray(0);
