@@ -30,11 +30,6 @@ inline constexpr char batched[] = {
 
 namespace fragment {
 
-inline constexpr char text[] = {
-#embed "../shaders/text.frag" suffix(,)
-'\0'
-};
-
 inline constexpr char default_[] = {
 #embed "../shaders/default.frag" suffix(,)
 '\0'

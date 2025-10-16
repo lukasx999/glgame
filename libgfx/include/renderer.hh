@@ -24,7 +24,7 @@
 // TODO: limit fps eg: set_fps(std::optional<int> fps)
 // TODO: rotation for textures/rectangles
 // TODO: circle using GL_POINTS
-// TODO: proper batch rendering for textures
+// TODO: proper batch rendering for textures (transform mat)
 // TODO: fix glfw resizing window
 
 // TODO: delete:
@@ -106,7 +106,7 @@ public:
 
     void draw_texture(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture) {
         flush_all_except(m_texture);
-        m_texture.draw(x, y, width, height, rotation, texture);
+        m_texture.draw(x, y, width, height, rotation, texture, m_view_active);
     }
 
     void draw_circle(int x, int y, int radius, gfx::Color color) {

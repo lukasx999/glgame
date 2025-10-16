@@ -7,7 +7,7 @@ namespace gfx::detail {
 TextRenderer::TextRenderer(gfx::Window& window)
 : m_window(window) {
 
-    m_program = create_shader_program(shaders::vertex::text, shaders::fragment::text);
+    m_program = create_shader_program(shaders::vertex::text, shaders::fragment::texture);
 
     glGenVertexArrays(1, &m_vertex_array);
     glBindVertexArray(m_vertex_array);

@@ -65,16 +65,9 @@ void RectangleRenderer::draw(int x, int y, int width, int height, const gfx::IRo
     m_vertices.push_back({ x,       y+height }); // bottom-left
     m_vertices.push_back({ x+width, y+height }); // bottom-right
 
-    // TODO: doesnt work yet, as the rotation transform matrix is also applied to
-    // x+width, leading to weird rotations
-    // the old instance rendering implementation was using x+1.0
-    // either: use instance rendering like before, or use different transforms
-    // for different vertices of the rectangle
     glm::mat4 model(1.0);
-    // subtract half of width & height, needed for centered rotation
-    // model = glm::translate(model, glm::vec3(-width/2.0f, -height/2.0f, 0.0f));
+    // TODO:
     // model = glm::rotate(model, rotation.get_radians(), glm::vec3(0.0f, 0.0f, 1.0f));
-    // model = glm::translate(model, glm::vec3(width/2.0f, height/2.0f, 0.0f));
 
     glm::mat4 projection = glm::ortho(
         0.0f,

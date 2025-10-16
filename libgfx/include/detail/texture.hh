@@ -17,12 +17,14 @@ class TextureRenderer : public IBatchRenderer {
     GLuint m_vertex_buffer;
     GLuint m_index_buffer;
     GLuint m_uv_buffer;
+    GLuint m_transform_buffer;
 
     struct RenderGroup {
         const gfx::Texture& texture;
         std::vector<glm::vec2> vertices;
         std::vector<unsigned int> indices;
         std::vector<glm::vec2> uvs;
+        std::vector<glm::mat4> transforms;
     };
 
     // the texture sampler is a uniform, so we create groups of transforms per texture
@@ -38,7 +40,7 @@ class TextureRenderer : public IBatchRenderer {
 public:
     explicit TextureRenderer(gfx::Window& window);
 
-    void draw(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture);
+    void draw(int x, int y, int width, int height, const gfx::IRotation& rotation, const gfx::Texture& texture, glm::mat4 view);
     void flush() override;
 
 };
