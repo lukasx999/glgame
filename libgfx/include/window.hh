@@ -54,7 +54,6 @@ public:
             case GLFW_RELEASE: return KeyState::Release;
             case GLFW_PRESS:   return KeyState::Press;
             case GLFW_REPEAT:  return KeyState::Repeat;
-
         }
 
         throw std::runtime_error("unknown glfw key state");

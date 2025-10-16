@@ -4,7 +4,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 project(Game)
 
-include_directories(../libgfx/subprojects/glad/include)
+include_directories(../libgfx/deps/glad/include)
 include_directories(../libgfx/include)
 link_directories(../libgfx/build)
 include_directories(/usr/include/freetype2/)

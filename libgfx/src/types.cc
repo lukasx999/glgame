@@ -1,4 +1,4 @@
-#include <texture.hh>
+#include <detail/texture.hh>
 
 #include <stb_image.h>
 
