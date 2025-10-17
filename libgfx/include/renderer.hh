@@ -17,12 +17,11 @@
 #include <vec.hh>
 #include <window.hh>
 
+// TODO: static linking
 // TODO: auto-invoke python script for generating shader glue code
-// TODO: 2d camera
 // TODO: tui for statistics
 // TODO: show average fps
 // TODO: limit fps eg: set_fps(std::optional<int> fps)
-// TODO: rotation for textures/rectangles
 // TODO: circle using GL_POINTS
 // TODO: fix glfw resizing window
 // TODO: anti-aliasing

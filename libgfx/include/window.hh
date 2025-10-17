@@ -20,6 +20,11 @@ public:
     : m_window(init_glfw(width, height, window_title, resizable_window))
     { }
 
+    Window(const Window&) = delete;
+    Window(Window&&) = delete;
+    Window& operator=(const Window&) = delete;
+    Window& operator=(Window&&) = delete;
+
     ~Window() {
         glfwDestroyWindow(m_window);
         glfwTerminate();
@@ -27,6 +32,10 @@ public:
 
     [[nodiscard]] bool should_close() const {
         return glfwWindowShouldClose(m_window);
+    }
+
+    void close() {
+        glfwSetWindowShouldClose(m_window, true);
     }
 
     [[nodiscard]] int get_width() const {
