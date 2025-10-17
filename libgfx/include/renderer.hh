@@ -159,6 +159,9 @@ private:
     // overlapping shapes
     //
     // therefore we have to flush all other shapes before drawing the current one
+    //
+    // this has the unfortunate effect of breaking batching optimizations
+    // when using interleaved rendering when drawing a lot of shapes
     void flush_all_except(const detail::IBatchRenderer& exception) {
         for (auto& rd : m_batch_renderers) {
             if (reinterpret_cast<detail::IBatchRenderer*>(&rd) == &exception)
