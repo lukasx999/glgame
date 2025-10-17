@@ -11,3 +11,6 @@ include_directories(/usr/include/freetype2/)
 
 add_executable(game main.cc)
 target_link_libraries(game PRIVATE gfx glfw freetype)
+
+add_executable(example example.cc)
+target_link_libraries(example PRIVATE gfx glfw freetype)

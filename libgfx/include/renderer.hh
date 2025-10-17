@@ -68,7 +68,22 @@ public:
         , m_text(m_window)
     { }
 
-    void with_draw_context(std::function<void()> draw_fn);
+    // calls the given function in a draw context, issuing draw calls outside
+    // of this context, will result in undefined behavior
+    void with_draw_context(std::function<void()> draw_fn) {
+        calculate_frame_time();
+        draw_fn();
+        flush();
+        glfwSwapBuffers(m_window.m_window);
+        glfwPollEvents();
+    }
+
+    // calls the given function in a draw loop
+    void draw(std::function<void()> draw_fn) {
+        while (!m_window.should_close()) {
+            with_draw_context(draw_fn);
+        }
+    }
 
     [[nodiscard]] Window& get_window() const {
         return m_window;
