@@ -50,7 +50,11 @@ class Renderer {
     double m_frame_time = 0.0;
     double m_last_frame = 0.0;
 
-    glm::mat4 m_view_default = gen_view_matrix(m_window, m_window.get_width()/2.0f, m_window.get_height()/2.0f);
+    glm::mat4 m_view_default = gen_view_matrix(
+        m_window,
+        m_window.get_width()/2.0f,
+        m_window.get_height()/2.0f
+    );
     glm::mat4 m_view_camera = m_view_default;
     glm::mat4 m_view_active = m_view_default;
 
@@ -65,11 +69,11 @@ public:
         , m_text(m_window)
     { }
 
+    void with_draw_context(std::function<void()> draw_fn);
+
     [[nodiscard]] Window& get_window() const {
         return m_window;
     }
-
-    void with_draw_context(std::function<void()> draw_fn);
 
     [[nodiscard]] double get_frame_time() const {
         return m_frame_time;
