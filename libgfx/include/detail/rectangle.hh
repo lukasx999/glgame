@@ -8,7 +8,7 @@
 
 namespace gfx::detail {
 
-class RectangleRenderer : public IBatchRenderer {
+class RectangleRenderer : public IDeferredRenderer {
     gfx::Window& m_window;
 
     GLuint m_program;

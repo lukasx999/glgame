@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <functional>
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
@@ -39,7 +40,7 @@ class Renderer {
     detail::LineRenderer m_line;
     detail::TextRenderer m_text;
 
-    std::array<std::reference_wrapper<detail::IBatchRenderer>, 4> m_batch_renderers {
+    std::array<std::reference_wrapper<detail::IDeferredRenderer>, 4> m_deferred_renderers {
         m_rectangle,
         m_triangle,
         m_texture,
@@ -149,7 +150,7 @@ public:
 
 private:
     void flush() {
-        for (auto& rd : m_batch_renderers) {
+        for (auto& rd : m_deferred_renderers) {
             rd.get().flush();
         }
     }
@@ -162,9 +163,9 @@ private:
     //
     // this has the unfortunate effect of breaking batching optimizations
     // when using interleaved rendering when drawing a lot of shapes
-    void flush_all_except(const detail::IBatchRenderer& exception) {
-        for (auto& rd : m_batch_renderers) {
-            if (reinterpret_cast<detail::IBatchRenderer*>(&rd) == &exception)
+    void flush_all_except(const detail::IDeferredRenderer& exception) {
+        for (auto& rd : m_deferred_renderers) {
+            if (reinterpret_cast<detail::IDeferredRenderer*>(&rd) == &exception)
                 continue;
             rd.get().flush();
         }

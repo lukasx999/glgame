@@ -8,7 +8,7 @@
 
 namespace gfx::detail {
 
-class LineRenderer : public IBatchRenderer {
+class LineRenderer : public IDeferredRenderer {
     gfx::Window& m_window;
 
     GLuint m_program;

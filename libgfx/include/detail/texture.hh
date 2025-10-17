@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <vector>
 
 #include <window.hh>
 #include <detail/detail.hh>
@@ -55,7 +56,7 @@ private:
 
 namespace gfx::detail {
 
-class TextureRenderer : public IBatchRenderer {
+class TextureRenderer : public IDeferredRenderer {
     gfx::Window& m_window;
 
     GLuint m_program;

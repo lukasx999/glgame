@@ -1,8 +1,6 @@
 #pragma once
 
 #include <print>
-#include <stdexcept>
-#include <functional>
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <array>
+#include <vector>
 
 #include <window.hh>
 #include <types.hh>
@@ -8,7 +8,7 @@
 
 namespace gfx::detail {
 
-class TriangleRenderer : public IBatchRenderer {
+class TriangleRenderer : public IDeferredRenderer {
     gfx::Window& m_window;
 
     GLuint m_program;
