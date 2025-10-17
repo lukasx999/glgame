@@ -171,7 +171,7 @@ void TextureRenderer::flush() {
     glUseProgram(m_program);
     glBindVertexArray(m_vertex_array);
 
-    for (auto& [key, value] : m_group_data) {
+    for (auto& [key, value] : m_render_group) {
         auto& [texture, vertices, indices, uvs, transforms] = value;
 
         glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
