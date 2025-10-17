@@ -112,7 +112,7 @@ int main() {
 
                 rd.draw_triangle(0, 0, 100, 100, 0, 100, gfx::Color::red());
                 rd.draw_triangle(100, 0, 100, 100, 0, 100, gfx::Color::blue());
-                rd.draw_texture(0, 0, 100, 100, 0_deg, tex);
+                rd.draw_texture(0, 0, 100, 100, 45_deg, tex);
 
             });
 
@@ -128,9 +128,9 @@ int main() {
 
             // rd.draw_text(200, 200, 50, "hellog, world!", font, gfx::Color::red());
 
-            rd.draw_rectangle(300, 300, 200, 200, 0_deg, gfx::Color::red());
-            rd.draw_rectangle(300, 300, 200, 200, 45_deg, 0x4287f5ff);
-            rd.draw_rectangle(300, 300, 200, 200, 10_deg, gfx::Color::green());
+            // rd.draw_rectangle(300, 300, 200, 200, 0_deg, gfx::Color::red());
+            // rd.draw_rectangle(300, 300, 200, 200, 45_deg, 0x4287f5ff);
+            // rd.draw_rectangle(300, 300, 200, 200, 10_deg, gfx::Color::green());
 
             // render_grid_triangles(rd, 100, 15, gfx::Color::blue());
             // render_grid(rd, 100, 15, gfx::Color::blue());

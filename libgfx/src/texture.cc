@@ -56,7 +56,13 @@ void TextureRenderer::draw(
     glm::mat4 view
 ) {
 
+    // the translations are needed to subtract the world space coordinates (x,y)
+    // since we want the rectangle to rotate around its top left corner, and
+    // to set the center of rotation to the middle of the rectangle
     glm::mat4 model(1.0);
+    model = glm::translate(model, glm::vec3(x+width/2.0, y+height/2.0, 0.0));
+    model = glm::rotate(model, rotation.get_radians(), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::translate(model, glm::vec3(-x-width/2.0, -y-height/2.0, 0.0));
 
     glm::mat4 projection = glm::ortho(
         0.0f,
