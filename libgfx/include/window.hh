@@ -14,8 +14,8 @@
 namespace gfx {
 
 class Window {
-    GLFWwindow* m_window;
     friend class Renderer;
+    GLFWwindow* m_window;
 
 public:
     Window(int width, int height, const char* window_title, bool resizable_window)

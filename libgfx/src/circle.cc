@@ -39,7 +39,7 @@ CircleRenderer::CircleRenderer(gfx::Window& window)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void CircleRenderer::draw(int x, int y, int radius, gfx::Color color) {
+void CircleRenderer::draw(float x, float y, float radius, gfx::Color color) {
 
     glBindVertexArray(m_vertex_array);
     glUseProgram(m_program);

@@ -23,7 +23,7 @@ class LineRenderer : public IBatchRenderer {
 
 public:
     explicit LineRenderer(gfx::Window& window);
-    void draw(int x0, int y0, int x1, int y1, gfx::Color color, glm::mat4 view);
+    void draw(float x0, float y0, float x1, float y1, gfx::Color color, glm::mat4 view);
     void flush() override;
 
 };

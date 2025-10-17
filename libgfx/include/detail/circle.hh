@@ -31,7 +31,7 @@ class CircleRenderer {
 public:
     explicit CircleRenderer(gfx::Window& window);
 
-    void draw(int x, int y, int radius, gfx::Color color);
+    void draw(float x, float y, float radius, gfx::Color color);
 
 };
 

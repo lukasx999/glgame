@@ -79,10 +79,10 @@ TextureRenderer::TextureRenderer(gfx::Window& window)
 }
 
 void TextureRenderer::draw(
-    int x,
-    int y,
-    int width,
-    int height,
+    float x,
+    float y,
+    float width,
+    float height,
     const gfx::IRotation& rotation,
     const gfx::Texture& texture,
     glm::mat4 view

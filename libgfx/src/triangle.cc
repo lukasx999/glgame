@@ -51,7 +51,7 @@ TriangleRenderer::TriangleRenderer(gfx::Window& window)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void TriangleRenderer::draw(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color, glm::mat4 view) {
+void TriangleRenderer::draw(float x0, float y0, float x1, float y1, float x2, float y2, gfx::Color color, glm::mat4 view) {
     m_vertices.push_back({ x0, y0 });
     m_vertices.push_back({ x1, y1 });
     m_vertices.push_back({ x2, y2 });

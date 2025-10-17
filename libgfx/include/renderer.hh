@@ -49,7 +49,7 @@ class Renderer {
     double m_frame_time = 0.0;
     double m_last_frame = 0.0;
 
-    glm::mat4 m_view_default = gen_view_matrix(m_window, m_window.get_width()/2, m_window.get_height()/2);
+    glm::mat4 m_view_default = gen_view_matrix(m_window, m_window.get_width()/2.0f, m_window.get_height()/2.0f);
     glm::mat4 m_view_camera = m_view_default;
     glm::mat4 m_view_active = m_view_default;
 
@@ -85,7 +85,7 @@ public:
     }
 
     // TODO: rotation
-    void set_camera(int center_x, int center_y) {
+    void set_camera(float center_x, float center_y) {
         m_view_camera = gen_view_matrix(m_window, center_x, center_y);
     }
 
@@ -94,10 +94,10 @@ public:
     }
 
     void draw_rectangle(
-        int x,
-        int y,
-        int width,
-        int height,
+        float x,
+        float y,
+        float width,
+        float height,
         const gfx::IRotation& rotation,
         gfx::Color color
     ) {
@@ -106,10 +106,10 @@ public:
     }
 
     void draw_texture(
-        int x,
-        int y,
-        int width,
-        int height,
+        float x,
+        float y,
+        float width,
+        float height,
         const gfx::IRotation& rotation,
         const gfx::Texture& texture
     ) {
@@ -117,22 +117,22 @@ public:
         m_texture.draw(x, y, width, height, rotation, texture, m_view_active);
     }
 
-    void draw_circle(int x, int y, int radius, gfx::Color color) {
+    void draw_circle(float x, float y, float radius, gfx::Color color) {
         flush();
         m_circle.draw(x, y, radius, color);
     }
 
-    void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, gfx::Color color) {
+    void draw_triangle(float x0, float y0, float x1, float y1, float x2, float y2, gfx::Color color) {
         flush_all_except(m_triangle);
         m_triangle.draw(x0, y0, x1, y1, x2, y2, color, m_view_active);
     }
 
-    void draw_line(int x0, int y0, int x1, int y1, gfx::Color color) {
+    void draw_line(float x0, float y0, float x1, float y1, gfx::Color color) {
         flush_all_except(m_line);
         m_line.draw(x0, y0, x1, y1, color, m_view_active);
     }
 
-    void draw_text(int x, int y, int text_size, const char* text, const gfx::Font& font, gfx::Color color) {
+    void draw_text(float x, float y, unsigned int text_size, const char* text, const gfx::Font& font, gfx::Color color) {
         flush();
         m_text.draw(x, y, text_size, text, font, color);
     }
@@ -177,7 +177,7 @@ private:
     }
 
     [[nodiscard]] static constexpr
-    glm::mat4 gen_view_matrix(const Window& window, int center_x, int center_y) {
+    glm::mat4 gen_view_matrix(const Window& window, float center_x, float center_y) {
         glm::vec3 camera_position(
             center_x - window.get_width() / 2.0f,
             center_y - window.get_height() / 2.0f,

@@ -47,7 +47,7 @@ public:
     }
 
 private:
-    [[nodiscard]] detail::Glyph load_glyph(char c, int size) const {
+    [[nodiscard]] detail::Glyph load_glyph(char c, unsigned int size) const {
 
         if (FT_Set_Pixel_Sizes(m_face, 0, size)) {
             throw std::runtime_error("failed to set pixel size");
@@ -138,14 +138,14 @@ public:
     TextRenderer& operator=(const TextRenderer&) = delete;
     TextRenderer& operator=(TextRenderer&&) = delete;
 
-    void draw(int x, int y, int text_size, const char* text, const gfx::Font& font, gfx::Color color);
+    void draw(float x, float y, unsigned int text_size, const char* text, const gfx::Font& font, gfx::Color color);
 
     [[nodiscard]] gfx::Font load_font(const char* path) const {
         return { m_ft, path };
     }
 
 private:
-    void draw_char(int x, int y, const Glyph& glyph, gfx::Color color);
+    void draw_char(float x, float y, const Glyph& glyph, gfx::Color color);
 
 };
 
