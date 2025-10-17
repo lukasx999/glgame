@@ -89,6 +89,10 @@ public:
         m_view_camera = gen_view_matrix(m_window, center_x, center_y);
     }
 
+    void set_camera(gfx::Vec vec) {
+        set_camera(vec.x, vec.y);
+    }
+
     void draw_rectangle(
         int x,
         int y,

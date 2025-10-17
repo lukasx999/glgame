@@ -100,7 +100,7 @@ int main() {
                 camera.x -= step;
             }
 
-            rd.set_camera(camera.x, camera.y);
+            rd.set_camera(camera);
 
             // draw_spiked_ball(rd, 0.001);
 
