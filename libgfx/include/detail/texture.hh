@@ -1,6 +1,5 @@
 #pragma once
 
-#include <array>
 #include <unordered_map>
 
 #include <window.hh>
@@ -37,7 +36,6 @@ public:
         return m_channels;
     }
 
-    // TODO: copy/move ctor
     Texture(const Texture&) = delete;
     Texture(Texture&&) = delete;
     Texture& operator=(const Texture&) = delete;
@@ -83,7 +81,7 @@ class TextureRenderer : public IBatchRenderer {
     // this means that theoretically 2 identical textures could end up being in a
     // different group, if the user has 2 seperate `gfx::Texture` objects
     // however, this should never be a problem in practice
-    std::unordered_map<unsigned char*, RenderGroup> m_group_data;
+    std::unordered_map<unsigned char*, RenderGroup> m_render_group;
 
 public:
     explicit TextureRenderer(gfx::Window& window);

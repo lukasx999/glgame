@@ -2,11 +2,43 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include <stb_image.h>
+#include <GLFW/glfw3.h>
 
 #include <detail/texture.hh>
 #include "shaders.hh"
 
-namespace gfx::detail {
+namespace gfx {
+
+Texture::Texture(const char* path) {
+    m_data = stbi_load(path, &m_width, &m_height, &m_channels, 0);
+    if (m_data == nullptr) {
+        // TODO: custom exception type
+        throw std::runtime_error("failed to load texture");
+    }
+
+    glGenTextures(1, &m_texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    GLint format = get_opengl_texture_format();
+    glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, m_data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+Texture::~Texture() {
+    stbi_image_free(m_data);
+    glDeleteTextures(1, &m_texture);
+}
+
+namespace detail {
 
 TextureRenderer::TextureRenderer(gfx::Window& window)
 : m_window(window)
@@ -73,15 +105,16 @@ void TextureRenderer::draw(
 
     glm::mat4 mvp = projection * view * model;
 
-    if (m_group_data.contains(texture.m_data)) {
-        RenderGroup& g = m_group_data.at(texture.m_data);
+    if (m_render_group.contains(texture.m_data)) {
+        RenderGroup& g = m_render_group.at(texture.m_data);
 
-        g.indices.push_back(0u + g.vertices.size()); // top-left
-        g.indices.push_back(1u + g.vertices.size()); // top-right
-        g.indices.push_back(2u + g.vertices.size()); // bottom-left
-        g.indices.push_back(3u + g.vertices.size()); // bottom-right
-        g.indices.push_back(2u + g.vertices.size()); // bottom-left
-        g.indices.push_back(1u + g.vertices.size()); // top-right
+        int vertex_count = g.vertices.size();
+        g.indices.push_back(0u + vertex_count); // top-left
+        g.indices.push_back(1u + vertex_count); // top-right
+        g.indices.push_back(2u + vertex_count); // bottom-left
+        g.indices.push_back(3u + vertex_count); // bottom-right
+        g.indices.push_back(2u + vertex_count); // bottom-left
+        g.indices.push_back(1u + vertex_count); // top-right
 
         g.vertices.push_back({ x,       y        }); // top-left
         g.vertices.push_back({ x+width, y        }); // top-right
@@ -128,7 +161,7 @@ void TextureRenderer::draw(
                 mvp,
             }
         };
-        m_group_data.emplace(texture.m_data, group);
+        m_render_group.emplace(texture.m_data, group);
     }
 
 }
@@ -158,7 +191,9 @@ void TextureRenderer::flush() {
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
     }
 
-    m_group_data.clear();
+    m_render_group.clear();
 }
 
-} // namespace gfx::detail
+} // namespace detail
+
+} // namespace gfx
