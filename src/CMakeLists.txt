@@ -4,13 +4,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 project(Game)
 
-include_directories(../libgfx/deps/glad/include)
-include_directories(../libgfx/include)
-link_directories(../libgfx/build)
+include_directories(../../libgfx/lib/deps/glad/include)
+include_directories(../../libgfx/lib/include)
+link_directories(../../libgfx/lib/build)
 include_directories(/usr/include/freetype2/)
 
 add_executable(game main.cc)
 target_link_libraries(game PRIVATE gfx glfw freetype)
-
-add_executable(example example.cc)
-target_link_libraries(example PRIVATE gfx glfw freetype)

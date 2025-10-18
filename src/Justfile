@@ -1,5 +1,5 @@
 build_libgfx:
-    just -f ../libgfx/Justfile build
+    just -f ../../libgfx/lib/Justfile build
 
 configure: build_libgfx
     cmake -B build -G Ninja -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
